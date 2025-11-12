@@ -15,18 +15,28 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const dummyUser = { id: "testuser", password: "1234" };
+  const dummyUser = { id: "testuser", password: "1234" }; //사용자
+  const adminUser = { id: "admin", password: "1234", role: "admin" };  //관리자
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (id !== dummyUser.id) {
-      setError("아이디가 틀렸습니다.");
-    } else if (password !== dummyUser.password) {
-      setError("비밀번호가 틀렸습니다.");
-    } else {
-      setError("");
+
+    if (id === adminUser.id && password === adminUser.password) {
+      // 관리자 로그인
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", "admin");
+      setError("");
+      navigate("/admin/main"); // 관리자 메인으로 이동
+    } 
+    else if (id === dummyUser.id && password === dummyUser.password) {
+      // 사용자 로그인
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", "user");
+      setError("");
       navigate("/home/after");
+    } 
+    else {
+      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
   };
 

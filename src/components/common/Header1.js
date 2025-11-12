@@ -18,6 +18,7 @@ function Header1({ isLoggedIn = false }) {
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("role");
     navigate("/home/before");
   };
 

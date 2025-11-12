@@ -1,0 +1,19 @@
+import React from "react";
+import AdminHeader1 from "../../components/common/AdminHeader1";
+import AdminHeader2 from "../../components/common/AdminHeader2";
+import Footer from "../../components/common/Footer";
+import "../../styles/admin/MainAdmin.css";
+
+export default function MainAdmin() {
+  return (
+    <>
+      <AdminHeader1 isLoggedIn={true} />
+      <AdminHeader2 isLoggedIn={true} />
+
+      <div style={{ backgroundColor: "#FFEEB5", minHeight: "70vh", textAlign: "center", paddingTop: "100px" }}>
+        <h2>아직 준비되지 않았습니다.</h2>
+      </div>
+      <Footer />
+    </>
+  );
+}

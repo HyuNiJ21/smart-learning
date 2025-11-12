@@ -10,29 +10,42 @@ function FaqQnaTab() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [editPost, setEditPost] = useState(null);
 
-  // FAQ (검색만 가능)
+  const parseDate = (t) => {
+    if (!t) return 0;
+    const [year, month, day, hour, minute] = t
+      .replace("년", "")
+      .replace("월", "")
+      .replace("일", "")
+      .trim()
+      .split(/[\s:]+/)
+      .map(Number);
+    return new Date(year, month - 1, day, hour, minute).getTime();
+  };
+
+  // FAQ 초기 데이터
   const [faqList, setFaqList] = useState([
-    { id: 1, title: "비밀번호 변경 방법은?", content: "프로필 설정에서 변경 가능합니다.", time: "09:40" },
-    { id: 2, title: "회원탈퇴는 어떻게 하나요?", content: "마이페이지에서 탈퇴 요청이 가능합니다.", time: "11:15" },
+    { id: 1, title: "비밀번호 변경 방법은?", content: "프로필 설정에서 변경 가능합니다.", time: "2025년 11월 2일 09:40" },
+    { id: 2, title: "회원탈퇴는 어떻게 하나요?", content: "마이페이지에서 탈퇴 요청이 가능합니다.", time: "2025년 11월 1일 11:15" },
   ]);
-  const [originalFaqList, setOriginalFaqList] = useState(faqList);
+  const [originalFaqList, setOriginalFaqList] = useState([]);
 
-  // QnA (글쓰기/수정/삭제 가능)
+  // QnA 초기 데이터
   const [qnaList, setQnaList] = useState([
-    { id: 1, title: "첫번째 문의", content: "테스트", time: "13:10" },
+    { id: 1, title: "첫번째 문의", content: "테스트", time: "2025년 11월 3일 13:10" },
   ]);
-  const [originalQnaList, setOriginalQnaList] = useState(qnaList);
+  const [originalQnaList, setOriginalQnaList] = useState([]);
 
+  // 원본 데이터 저장
   useEffect(() => {
     if (originalFaqList.length === 0) setOriginalFaqList(faqList);
     if (originalQnaList.length === 0) setOriginalQnaList(qnaList);
-  }, []);
+  }, [faqList, qnaList, originalFaqList.length, originalQnaList.length]);
 
   // 검색 버튼 클릭 시 필터링
   const handleSearchClick = () => {
     if (activeSubTab === "faq") {
       if (!search.trim()) {
-        setFaqList(originalFaqList);
+        setFaqList(originalFaqList); // 전체 복원
         return;
       }
       const filtered = originalFaqList.filter(
@@ -43,7 +56,7 @@ function FaqQnaTab() {
       setFaqList(filtered);
     } else {
       if (!search.trim()) {
-        setQnaList(originalQnaList);
+        setQnaList(originalQnaList); // 전체 복원
         return;
       }
       const filtered = originalQnaList.filter(
@@ -55,61 +68,35 @@ function FaqQnaTab() {
     }
   };
 
-  const handleAddFaq = (newPost) => {
-    const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(
-      now.getDate()
-    ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(
-      now.getMinutes()
-    ).padStart(2, "0")}`;
+  // 검색어 공백 시 자동 복원
+  useEffect(() => {
+    if (!search.trim()) {
+      setFaqList(originalFaqList);
+      setQnaList(originalQnaList);
+    }
+  }, [search, originalFaqList, originalQnaList]);
 
-    const newItem = {
-      id: Date.now(),
-      title: newPost.title,
-      content: newPost.content,
-      time: dateStr
-    };
-
-    const updated = [newItem, ...faqList];
-    setFaqList(updated);
-    setOriginalFaqList(updated);
-    setIsWriting(false);
-  };
-  
-  // QnA 글 등록
   const handleAddQna = (newPost) => {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(
-    now.getDate()
-  ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(
-    now.getMinutes()
-  ).padStart(2, "0")}`;
+    const dateStr = `${now.getFullYear()}년 ${String(now.getMonth() + 1).padStart(2, "0")}월 ${String(
+      now.getDate()
+    ).padStart(2, "0")}일 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-    const newItem = {
-      id: Date.now(),
-      title: newPost.title,
-      content: newPost.content,
-      time: dateStr,
-    };
-
+    const newItem = { id: Date.now(), title: newPost.title, content: newPost.content, time: dateStr };
     const updated = [newItem, ...qnaList];
     setQnaList(updated);
     setOriginalQnaList(updated);
     setIsWriting(false);
   };
 
-  // QnA 수정 완료
   const handleEditSubmit = (updatedPost) => {
-    const updatedList = qnaList.map((post) =>
-      post.id === updatedPost.id ? updatedPost : post
-    );
+    const updatedList = qnaList.map((post) => (post.id === updatedPost.id ? updatedPost : post));
     setQnaList(updatedList);
     setOriginalQnaList(updatedList);
     setEditPost(null);
     setSelectedPost(null);
   };
 
-  // 삭제
   const handleDelete = (postId) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       const updated = qnaList.filter((post) => post.id !== postId);
@@ -120,7 +107,6 @@ function FaqQnaTab() {
     }
   };
 
-  // 보기/수정/글쓰기 전환
   const handleViewPost = (item) => setSelectedPost(item);
   const handleBackToList = () => {
     setSelectedPost(null);
@@ -128,14 +114,9 @@ function FaqQnaTab() {
     setIsWriting(false);
   };
 
-  // 글쓰기 모드
+  // 글쓰기/수정/보기 모드
   if (isWriting) return <WriteTab onBack={handleBackToList} onSubmit={handleAddQna} />;
-
-  // 수정 모드
-  if (editPost)
-    return <WriteTab onBack={handleBackToList} onSubmit={handleEditSubmit} editPost={editPost} />;
-
-  // 상세 보기 모드 (흰 배경, 수정/삭제 버튼)
+  if (editPost) return <WriteTab onBack={handleBackToList} onSubmit={handleEditSubmit} editPost={editPost} />;
   if (selectedPost) {
     return (
       <div className="tab-inner faq-tab">
@@ -147,15 +128,9 @@ function FaqQnaTab() {
         </div>
 
         <div className="btn-right" style={{ gap: "10px" }}>
-          <button className="common-btn" onClick={() => setEditPost(selectedPost)}>
-            수정
-          </button>
-          <button className="cancel-btn" onClick={() => handleDelete(selectedPost.id)}>
-            삭제
-          </button>
-          <button className="cancel-btn" onClick={handleBackToList}>
-            목록으로
-          </button>
+          <button className="common-btn" onClick={() => setEditPost(selectedPost)}>수정</button>
+          <button className="cancel-btn" onClick={() => handleDelete(selectedPost.id)}>삭제</button>
+          <button className="cancel-btn" onClick={handleBackToList}>목록으로</button>
         </div>
       </div>
     );
@@ -163,11 +138,11 @@ function FaqQnaTab() {
 
   // 최신순 정렬
   const sortedFaq = [...faqList]
-    .sort((a, b) => new Date(b.time) - new Date(a.time)) 
+    .sort((a, b) => parseDate(b.time) - parseDate(a.time))
     .map((item, index, arr) => ({ ...item, no: arr.length - index }));
 
   const sortedQna = [...qnaList]
-    .sort((a, b) => new Date(b.time) - new Date(a.time))
+    .sort((a, b) => parseDate(b.time) - parseDate(a.time))
     .map((item, index, arr) => ({ ...item, no: arr.length - index }));
 
   const listToShow = activeSubTab === "faq" ? sortedFaq : sortedQna;
@@ -178,18 +153,8 @@ function FaqQnaTab() {
 
       {/* 전환 */}
       <div className="faq-tabs">
-        <button
-          className={activeSubTab === "faq" ? "active" : ""}
-          onClick={() => setActiveSubTab("faq")}
-        >
-          FAQ
-        </button>
-        <button
-          className={activeSubTab === "qna" ? "active" : ""}
-          onClick={() => setActiveSubTab("qna")}
-        >
-          Q&A
-        </button>
+        <button className={activeSubTab === "faq" ? "active" : ""} onClick={() => setActiveSubTab("faq")}>FAQ</button>
+        <button className={activeSubTab === "qna" ? "active" : ""} onClick={() => setActiveSubTab("qna")}>Q&A</button>
       </div>
 
       {/* 검색 */}
@@ -202,18 +167,6 @@ function FaqQnaTab() {
         />
         <button className="search-btn" onClick={handleSearchClick}>
           <Search size={18} />
-        </button>
-
-        {/* 검색 초기화 버튼 */}
-        <button
-          className="reset-btn"
-          onClick={() => {
-            setSearch("");
-            setFaqList(originalFaqList);
-            setQnaList(originalQnaList);
-          }}
-        >
-          전체보기
         </button>
       </div>
 
@@ -241,12 +194,9 @@ function FaqQnaTab() {
         </tbody>
       </table>
 
-      {/* QnA 글쓰기 버튼 */}
       {activeSubTab === "qna" && (
         <div className="btn-right">
-          <button className="common-btn" onClick={() => setIsWriting(true)}>
-            글쓰기
-          </button>
+          <button className="common-btn" onClick={() => setIsWriting(true)}>글쓰기</button>
         </div>
       )}
     </div>
