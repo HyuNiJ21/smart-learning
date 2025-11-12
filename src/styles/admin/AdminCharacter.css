@@ -1,12 +1,12 @@
 .admin-character-layout {
-  background-color: #ffeeB5;
+  background-color: #fff7b5;
   min-height: calc(100vh - 200px);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 60px;
-  padding: 50px 80px 80px;
-  font-family: "Pretendard", sans-serif;
+  padding: 130px 80px 80px;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .section-title {
@@ -18,10 +18,10 @@
 
 .character-list-box {
   flex: 1;
-  background: #fff7b5;
-  border-radius: 20px;
-  padding: 40px 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #fff4b5;
+  border-radius: 15px;
+  padding: 20px 30px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .character-list {
@@ -31,49 +31,56 @@
 }
 
 .character-card {
+  background: #fff;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border-radius: 15px;
-  padding: 12px 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 18px 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.character-card:hover {
+  transform: translateY(-3px);
+}
+
+.character-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .char-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 10px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
-  background-color: #fff;
-  display: inline-block;
-  margin: 0 auto 10px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
-.char-info {
-  flex: 1;
-  margin-left: 15px;
+.char-detail h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
 }
 
-.char-info h4 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.char-info p {
+.char-detail p {
   font-size: 14px;
-  color: #666;
+  color: #777;
 }
 
 .delete-btn {
   background: #ff7070;
   border: none;
   color: #fff;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .delete-btn:hover {
@@ -82,10 +89,10 @@
 
 .character-add-box {
   flex: 0 0 380px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 20px;
   padding: 40px 35px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .add-form {
@@ -108,8 +115,13 @@
 .add-form input[type="file"] {
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   font-size: 14px;
+}
+
+.add-form input:focus {
+  border-color: #ffd400;
+  outline: none;
 }
 
 .image-preview {
@@ -124,20 +136,24 @@
   border-radius: 15px;
   border: 1px solid #ddd;
   background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .add-btn {
   background: #ffd400;
   border: none;
   border-radius: 30px;
-  padding: 10px 20px;
-  font-weight: 700;
+  padding: 12px 0;
+  font-weight: 800;
+  font-size: 15px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 16px rgba(255, 212, 0, 0.3);
 }
 
 .add-btn:hover {
-  background: #e6c200;
+  background: #f0c500;
+  transform: translateY(-2px);
 }
 
 .empty-text {
@@ -145,4 +161,19 @@
   color: #555;
   font-size: 15px;
   margin-top: 30px;
+}
+
+@media (max-width: 1024px) {
+  .admin-character-layout {
+    flex-direction: column;
+    padding: 160px 40px 60px;
+  }
+
+  .character-add-box {
+    width: 100%;
+  }
+
+  .character-list-box {
+    width: 100%;
+  }
 }

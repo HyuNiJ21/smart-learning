@@ -3,7 +3,6 @@ import AdminHeader1 from "../../components/common/AdminHeader1";
 import AdminHeader2 from "../../components/common/AdminHeader2";
 import Footer from "../../components/common/Footer";
 import "../../styles/admin/AdminCharacter.css";
-import "../../styles/character/CharacterPage.css";
 import snoopy1 from "../../assets/snoopy1.png";
 import snoopy2 from "../../assets/snoopy2.png";
 import snoopy3 from "../../assets/snoopy3.png";
