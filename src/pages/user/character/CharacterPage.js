@@ -23,7 +23,7 @@ function CharacterPage() {
   const [newName, setNewName] = useState("");
   const [character, setCharacter] = useState("tree");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [userLevel, setUserLevel] = useState(1); 
+  const [userLevel, setUserLevel] = useState(5); 
 
   const handleNameChange = () => {
     if (!newName.trim()) return;

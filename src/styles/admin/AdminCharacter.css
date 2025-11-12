@@ -1,0 +1,149 @@
+.admin-character-layout {
+  background-color: #ffeeB5;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 200px 80px 80px;
+  font-family: "Pretendard", sans-serif;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.character-list-box {
+  flex: 1;
+  background: #fff7b5;
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.character-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 15px;
+  padding: 12px 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.char-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: contain;
+  background-color: #fff;
+  display: inline-block;
+  margin: 0 auto 10px;
+}
+
+.char-info {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.char-info h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.char-info p {
+  font-size: 14px;
+  color: #666;
+}
+
+.delete-btn {
+  background: #ff7070;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ff5050;
+}
+
+/* 우측: 추가 폼 */
+.character-add-box {
+  flex: 0 0 380px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 35px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-form label {
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.add-form input[type="text"],
+.add-form input[type="number"],
+.add-form input[type="file"] {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.image-preview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.image-preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.add-btn {
+  background: #ffd400;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-btn:hover {
+  background: #e6c200;
+}
+
+.empty-text {
+  text-align: center;
+  color: #555;
+  font-size: 15px;
+  margin-top: 30px;
+}

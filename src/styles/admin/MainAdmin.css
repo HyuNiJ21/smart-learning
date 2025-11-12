@@ -1,10 +1,139 @@
-.admin-container {
+/* ✅ 상단 고정 헤더 */
+.admin-header-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.admin-content {
-  background-color: #FFEEB5;
-  border-radius: 12px;
-  margin: 50px auto;
-  width: 90%;
+/* 메인 레이아웃 전체 */
+.admin-main-layout {
+  background-color: #ffeeB5;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 200px 80px 80px; /* ⬅️ 헤더 높이만큼 위쪽 여백 추가 */
+  font-family: "Pretendard", sans-serif;
+}
+
+/* 섹션 제목 */
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+/* 왼쪽 패널 */
+.admin-left {
+  flex: 0 0 300px;
+  background: #fff7b5;
+  border-radius: 20px;
+  padding: 30px 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: scale(1.03);
+}
+
+.stat-title {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #333;
+}
+
+/* 오른쪽 패널 */
+.admin-right {
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.empty-text {
+  text-align: center;
+  color: #777;
+  margin-top: 50px;
+  font-size: 16px;
+}
+
+/* 타임라인 */
+.timeline-container {
+  position: relative;
+  margin-top: 30px;
+  padding-left: 40px;
+  border-left: 3px solid #ffd400;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 18px 20px 18px 25px;
+  margin-bottom: 30px;
+  background: #fffdf0;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timeline-item:hover {
+  background: #fff8c5;
+  transform: translateX(6px);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -10px;
+  top: 24px;
+  width: 15px;
+  height: 15px;
+  background: #ffd400;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.timeline-date {
+  font-size: 13px;
+  color: #777;
+}
+
+.timeline-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #333;
+}
+
+.timeline-user {
+  font-size: 14px;
+  color: #555;
 }
