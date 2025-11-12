@@ -1,15 +1,3 @@
-/* ✅ 상단 고정 헤더 */
-.admin-header-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-/* 메인 레이아웃 전체 */
 .admin-main-layout {
   background-color: #ffeeB5;
   min-height: calc(100vh - 200px);
@@ -17,109 +5,88 @@
   justify-content: center;
   align-items: flex-start;
   gap: 60px;
-  padding: 200px 80px 80px; /* ⬅️ 헤더 높이만큼 위쪽 여백 추가 */
+  padding: 200px 80px 80px;  
+  padding: 50px 80px 80px; 
   font-family: "Pretendard", sans-serif;
 }
 
-/* 섹션 제목 */
-.section-title {
-  font-size: 22px;
-  font-weight: 800;
-  color: #333;
-  margin-bottom: 25px;
-  text-align: left;
-}
 
-/* 왼쪽 패널 */
 .admin-left {
   flex: 0 0 300px;
   background: #fff7b5;
   border-radius: 20px;
-  padding: 30px 25px;
+  padding: 35px 25px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .stats-card {
   background: #fff;
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 15px;
+  padding: 15px 18px;
   text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-}
-
-.stats-card:hover {
-  transform: scale(1.03);
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .stat-title {
   font-size: 15px;
   color: #666;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .stat-value {
   font-size: 22px;
   font-weight: 800;
-  color: #333;
+  color: #000;
 }
 
-/* 오른쪽 패널 */
 .admin-right {
   flex: 1;
   background: #fff;
   border-radius: 20px;
-  padding: 40px 50px;
+  padding: 40px 35px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.empty-text {
-  text-align: center;
-  color: #777;
-  margin-top: 50px;
-  font-size: 16px;
-}
-
-/* 타임라인 */
 .timeline-container {
-  position: relative;
-  margin-top: 30px;
-  padding-left: 40px;
-  border-left: 3px solid #ffd400;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .timeline-item {
-  position: relative;
-  padding: 18px 20px 18px 25px;
-  margin-bottom: 30px;
   background: #fffdf0;
-  border-radius: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #ffd400;
+  border-left: 6px solid #ffd400;
+  border-radius: 12px;
+  padding: 16px 20px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .timeline-item:hover {
-  background: #fff8c5;
-  transform: translateX(6px);
+  background: #fff9c2;
 }
 
 .timeline-dot {
-  position: absolute;
-  left: -10px;
-  top: 24px;
-  width: 15px;
-  height: 15px;
-  background: #ffd400;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  background-color: #ffd400;
+  margin-bottom: 8px;
 }
 
 .timeline-content {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .timeline-date {
@@ -128,12 +95,51 @@
 }
 
 .timeline-title {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  color: #333;
+  color: #222;
 }
 
 .timeline-user {
   font-size: 14px;
   color: #555;
+}
+
+.timeline-item.answered {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-left: 6px solid #ccc;
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timeline-item.answered .timeline-dot {
+  display: none;
+}
+
+.timeline-item.answered:hover {
+  background: #ebebeb;
+}
+
+.answered-label {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #fff;
+  background: #888;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+.empty-text {
+  color: #555;
+  text-align: center;
+  font-size: 15px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }

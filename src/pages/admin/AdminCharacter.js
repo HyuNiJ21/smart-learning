@@ -27,7 +27,6 @@ export default function AdminCharacter() {
     preview: "",
   });
 
-  // 이미지 업로드
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.includes("image")) {
@@ -39,7 +38,6 @@ export default function AdminCharacter() {
     }
   };
 
-  // 캐릭터 등록
   const handleAddCharacter = (e) => {
     e.preventDefault();
     if (!newChar.name || !newChar.level || !newChar.image) {
@@ -58,7 +56,6 @@ export default function AdminCharacter() {
     setNewChar({ name: "", level: "", image: null, preview: "" });
   };
 
-  // 캐릭터 삭제
   const handleDelete = (id) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       setCharacters(characters.filter((c) => c.id !== id));
@@ -73,7 +70,6 @@ export default function AdminCharacter() {
       </div>
 
       <div className="admin-character-layout">
-        {/* 좌측: 캐릭터 리스트 */}
         <div className="character-list-box">
           <h2 className="section-title">등록된 캐릭터</h2>
 
@@ -100,7 +96,6 @@ export default function AdminCharacter() {
           )}
         </div>
 
-        {/* 우측: 캐릭터 추가 */}
         <div className="character-add-box">
           <h2 className="section-title">새 캐릭터 추가</h2>
 

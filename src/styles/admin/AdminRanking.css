@@ -9,7 +9,6 @@
   font-family: "Pretendard", sans-serif;
 }
 
-/* 제목 공통 */
 .section-title {
   font-size: 22px;
   font-weight: 800;
@@ -17,7 +16,6 @@
   margin-bottom: 25px;
 }
 
-/* 왼쪽 통계 카드 */
 .ranking-summary-box {
   flex: 0 0 280px;
   background: #fff7b5;
@@ -47,7 +45,6 @@
   color: #000;
 }
 
-/* 오른쪽 순위 테이블 */
 .ranking-list-box {
   flex: 1;
   background: #fff;
