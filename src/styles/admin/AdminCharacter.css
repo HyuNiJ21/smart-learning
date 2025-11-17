@@ -1,78 +1,88 @@
-.admin-character-layout {
-  background-color: #fff7b5;
+/* 최상단 래퍼 */
+.adminChar-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 레이아웃 */
+.adminChar-layout {
+  background-color: #ffeeB5;
   min-height: calc(100vh - 200px);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 60px;
   padding: 130px 80px 80px;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Pretendard", sans-serif;
 }
 
-.section-title {
+
+/* 제목 */
+.adminChar-title {
   font-size: 22px;
   font-weight: 800;
   color: #333;
   margin-bottom: 25px;
 }
 
-.character-list-box {
+/* 왼쪽 리스트 */
+.adminChar-list-box {
   flex: 1;
-  background: #fff4b5;
-  border-radius: 15px;
-  padding: 20px 30px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  background: #fff; /* 랭킹 리스트 박스와 통일 */
+  border-radius: 20px;
+  padding: 40px 35px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.character-list {
+/* 캐릭터 리스트 */
+.adminChar-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.character-card {
-  background: #fff;
-  border-radius: 18px;
+/* 캐릭터 카드 */
+.adminChar-card {
+  background: #fffdf2; /* ranking-table even background 느낌 */
+  border-radius: 15px;
+  padding: 18px 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 25px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* stat-card와 동일 */
+  border: 1px solid #ddd; /* ranking-table border 느낌 */
+  transition: background 0.2s;
 }
 
-.character-card:hover {
-  transform: translateY(-3px);
+.adminChar-card:hover {
+  background: #fff5a8; /* ranking-table hover 동일 */
 }
 
-.character-info {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.char-img {
+/* 이미지 */
+.adminChar-img {
   width: 90px;
   height: 90px;
   object-fit: contain;
+  border-radius: 12px;
   background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ddd;
 }
 
-.char-detail h4 {
+/* 정보 */
+.adminChar-info h4 {
   font-size: 18px;
   font-weight: 700;
   color: #333;
-  margin-bottom: 5px;
 }
 
-.char-detail p {
-  font-size: 14px;
-  color: #777;
+.adminChar-info p {
+  font-size: 15px;
+  color: #555;
 }
 
-.delete-btn {
+/* 삭제 버튼 */
+.adminChar-delete {
   background: #ff7070;
   border: none;
   color: #fff;
@@ -80,100 +90,97 @@
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
-.delete-btn:hover {
+.adminChar-delete:hover {
   background: #ff5050;
 }
 
-.character-add-box {
-  flex: 0 0 380px;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 40px 35px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+/* 빈 상태 */
+.adminChar-empty {
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+  margin-top: 30px;
 }
 
-.add-form {
+/* 우측 추가 박스 */
+.adminChar-add-box {
+  flex: 0 0 350px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 35px 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 */
+.adminChar-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.add-form label {
-  font-weight: bold;
+.adminChar-form label {
+  font-size: 15px;
+  font-weight: 700;
   color: #333;
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.adminChar-form input[type="text"],
+.adminChar-form input[type="number"],
+.adminChar-form input[type="file"] {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 12px;
   font-size: 15px;
 }
 
-.add-form input[type="text"],
-.add-form input[type="number"],
-.add-form input[type="file"] {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 14px;
-}
-
-.add-form input:focus {
+.adminChar-form input:focus {
   border-color: #ffd400;
   outline: none;
 }
 
-.image-preview {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.image-preview img {
+/* 이미지 미리보기 */
+.adminChar-preview img {
   width: 120px;
   height: 120px;
   object-fit: contain;
-  border-radius: 15px;
   border: 1px solid #ddd;
   background: #fff;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.add-btn {
+/* 등록 버튼 */
+.adminChar-add-btn {
   background: #ffd400;
   border: none;
   border-radius: 30px;
   padding: 12px 0;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 6px 16px rgba(255, 212, 0, 0.3);
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(255, 212, 0, 0.3);
 }
 
-.add-btn:hover {
+.adminChar-add-btn:hover {
   background: #f0c500;
-  transform: translateY(-2px);
 }
 
-.empty-text {
-  text-align: center;
-  color: #555;
-  font-size: 15px;
-  margin-top: 30px;
-}
-
+/* 반응형 */
 @media (max-width: 1024px) {
-  .admin-character-layout {
+  .adminChar-layout {
     flex-direction: column;
     padding: 160px 40px 60px;
   }
 
-  .character-add-box {
-    width: 100%;
-  }
-
-  .character-list-box {
+  .adminChar-list-box,
+  .adminChar-add-box {
     width: 100%;
   }
 }
