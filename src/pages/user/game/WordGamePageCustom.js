@@ -6,20 +6,20 @@ import deleteIcon from "../../../assets/delete.png";
 import "../../../styles/game/WordGame.css";
 import { useNavigate } from "react-router-dom";
 import { useWordSets } from "../../../context/WordSetContext";
+import * as XLSX from "xlsx";
 
 export default function WordGamePageCustom() {
   const navigate = useNavigate();
   const { userSets, addUserSet, deleteUserSet } = useWordSets();
 
-  // 업로드 관련 상태
   const [customName, setCustomName] = useState("");
   const [pendingFile, setPendingFile] = useState(null);
 
-  // 모달 상태 (알림용)
+  // 알림 모달
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  // 모달 상태 (삭제 확인용)
+  // 삭제 모달
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
 
@@ -29,35 +29,52 @@ export default function WordGamePageCustom() {
     setPendingFile(file);
   };
 
-  // Alert 모달 열기
+  // 셀 내용 자동 정리 (줄바꿈/여러 공백 제거)
+  const normalizeCell = (v) =>
+    String(v ?? "")
+      .replace(/\r?\n/g, " ") // 줄바꿈 -> 공백으로
+      .replace(/\s+/g, " ") // 여러 공백 -> 1개
+      .trim();
+
+  // 엑셀 다운로드
+  const downloadExcelTemplate = () => {
+    const rows = [
+      { word: "sample", correct: "예시" },
+      { word: "rain", correct: "비" },
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(rows, {
+      header: ["word", "correct"],
+    });
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Words");
+    XLSX.writeFile(wb, "WordSetTemplate.xlsx");
+  };
+
   const openAlert = (msg) => {
     setAlertMessage(msg);
     setShowAlertModal(true);
   };
 
-  // Alert 모달 닫기
   const closeAlert = () => {
     setShowAlertModal(false);
     setAlertMessage("");
   };
 
-  // 삭제 모달 열기
+  // 삭제
   const openDeleteConfirm = (id) => {
     setDeleteTargetId(id);
     setShowDeleteModal(true);
   };
 
-  // 삭제 모달 취소
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setDeleteTargetId(null);
   };
 
-  // "삭제" 최종 확정
   const confirmDelete = () => {
-    if (deleteTargetId !== null) {
-      deleteUserSet(deleteTargetId);
-    }
+    deleteUserSet(deleteTargetId);
     setShowDeleteModal(false);
     setDeleteTargetId(null);
   };
@@ -69,7 +86,12 @@ export default function WordGamePageCustom() {
       return;
     }
 
-    // 파일 이름 중복
+    if (!pendingFile) {
+      openAlert("엑셀 파일을 선택해주세요.");
+      return;
+    }
+
+    // 이름 중복
     const isDuplicateName = userSets.some(
       (s) => s.setName === customName.trim()
     );
@@ -77,34 +99,75 @@ export default function WordGamePageCustom() {
       openAlert("이미 존재하는 세트 이름입니다.");
       return;
     }
-    
-    if (!pendingFile) {
-      openAlert("JSON 파일을 선택해주세요.");
-      return;
-    }
 
     try {
-      const text = await pendingFile.text();
-      const json = JSON.parse(text);
+      const ext = pendingFile.name.toLowerCase().split(".").pop();
+      if (ext !== "xlsx" && ext !== "xls") {
+        openAlert("엑셀(.xlsx, .xls) 파일만 업로드할 수 있습니다.");
+        return;
+      }
 
-      const wordList = Array.isArray(json.wordList) ? json.wordList : [];
+      // 엑셀 읽기
+      const data = await pendingFile.arrayBuffer();
+      const wb = XLSX.read(data);
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rowsRaw = XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+      // 셀 값 정리
+      const rows = rowsRaw.map((r) => ({
+        word: normalizeCell(r.word),
+        correct: normalizeCell(r.correct),
+      }));
+
+      // 모든 correct 값 모으기
+      const allCorrects = rows
+        .map((r) => r.correct)
+        .filter(Boolean);
+
+      // 단어 리스트 만들기
+      const wordList = rows
+        .map((r) => {
+          const word = r.word;
+          const correct = r.correct;
+
+          if (!word || !correct) return null;
+
+          // 정답 제외 오답 후보
+          const wrongCandidates = allCorrects.filter((c) => c !== correct);
+
+          // 오답 섞기
+          const shuffled = [...wrongCandidates].sort(() => Math.random() - 0.5);
+          const wrongOptions = shuffled.slice(0, 3);
+
+          // 보기
+          const options = [correct, ...wrongOptions].sort(
+            () => Math.random() - 0.5
+          );
+
+          return { word, correct, options };
+        })
+        .filter(Boolean);
 
       if (!wordList.length) {
         openAlert("유효한 단어 목록이 없습니다.");
         return;
       }
 
-      // 정상 등록
+      // 등록
       addUserSet(customName.trim(), wordList);
 
       // 초기화
       setCustomName("");
       setPendingFile(null);
-    } catch {
-      openAlert("JSON 파싱 오류입니다.\n올바른 형식을 사용하세요.");
+
+      openAlert("엑셀 단어 세트가 등록되었습니다!");
+    } catch (err) {
+      console.error(err);
+      openAlert("엑셀 파일 처리 중 오류가 발생했습니다.\n템플릿 형식을 확인해주세요.");
     }
   };
 
+  // 게임 실행
   const startUserSet = (setObj) => {
     navigate("/user/game/quiz", {
       state: {
@@ -115,7 +178,7 @@ export default function WordGamePageCustom() {
       },
     });
   };
-  
+
   return (
     <>
       <Header1 isLoggedIn={true} />
@@ -124,7 +187,6 @@ export default function WordGamePageCustom() {
       <div className="wordgame-page">
         <h2 className="wordgame-title">내 단어 맞추기</h2>
 
-        {/* 업로드 + 이름 입력 폼 */}
         <div className="wordgame-header-section">
           <input
             className="wordgame-name-input"
@@ -132,58 +194,39 @@ export default function WordGamePageCustom() {
             placeholder="세트 이름"
             value={customName}
             onChange={(e) => setCustomName(e.target.value)}
-            style={{
-              width: "180px",
-              height: "30px",
-              padding: "10px 12px",
-              borderRadius: "8px",
-              border: "2px solid #ffd400",
-              fontWeight: 600,
-              textAlign: "center",
-              backgroundColor: "#fff",
-            }}
           />
 
-          <label className="wordgame-upload-card" style={{ marginTop: "8px" }}>
+          <label className="wordgame-upload-card">
             <div className="wordgame-upload-inner">
               <span className="wordgame-plus-icon">+</span>
-              <span>{pendingFile ? "파일 선택 완료" : "JSON 파일 선택"}</span>
+              <span>
+                {pendingFile ? "파일 선택 완료" : "엑셀 파일 선택"}
+              </span>
             </div>
             <input
               type="file"
-              accept="application/json"
+              accept=".xlsx, .xls"
               onChange={handleFileChange}
               hidden
             />
           </label>
 
-          <button
-            className="wordgame-nav-btn"
-            style={{ marginTop: "8px" }}
-            onClick={handleRegisterSet}
-          >
+          <button className="wordgame-nav-btn" onClick={handleRegisterSet}>
             등록하기
           </button>
-          
-          {/* 다운로드 받기 버튼*/}
+
           <button
             className="wordgame-nav-btn"
+            onClick={downloadExcelTemplate}
           >
-            다운로드 받기
+            엑셀 다운로드
           </button>
         </div>
 
-        {/* 사용자가 등록한 세트 목록만 */}
         <section style={{ width: "100%", maxWidth: "800px" }}>
           <div className="wordgame-folder-container">
             {userSets.length === 0 ? (
-              <p
-                style={{
-                  gridColumn: "1 / span 3",
-                  color: "#555",
-                  fontWeight: 500,
-                }}
-              >
+              <p style={{ gridColumn: "1 / span 3", color: "#555" }}>
                 아직 등록한 세트가 없습니다.
               </p>
             ) : (
@@ -192,12 +235,6 @@ export default function WordGamePageCustom() {
                   <div
                     className="wordgame-folder-left"
                     onClick={() => startUserSet(setObj)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      flex: 1,
-                      cursor: "pointer",
-                    }}
                   >
                     <img src={folderIcon} alt="folder" />
                     <p>{setObj.setName}</p>
@@ -206,7 +243,6 @@ export default function WordGamePageCustom() {
                   <button
                     className="wordgame-delete-btn"
                     onClick={() => openDeleteConfirm(setObj.id)}
-                    aria-label="delete uploaded set"
                   >
                     <img
                       src={deleteIcon}
@@ -235,7 +271,7 @@ export default function WordGamePageCustom() {
         </div>
       )}
 
-      {/* 삭제 확인 모달 */}
+      {/* 삭제 모달 */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={cancelDelete}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>

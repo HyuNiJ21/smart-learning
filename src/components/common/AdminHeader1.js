@@ -17,7 +17,7 @@ function AdminHeader1() {
   };
 
   const handleProfileClick = () => {
-    navigate("/admin/setting");
+    navigate("/admin/profile");
   };
 
   return (

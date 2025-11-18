@@ -9,8 +9,9 @@ export default function ResultPage() {
   const navigate = useNavigate();
 
   const results = location.state?.results || [];
-  const origin = location.state?.origin || null; // ← 추가된 부분
+  const origin = location.state?.origin || null;
   const correctCount = results.filter((r) => r.isCorrect).length;
+  const wordList = location.state?.wordList || [];
 
   const handleRetry = () => {
     if (origin === "preset") {
@@ -23,9 +24,19 @@ export default function ResultPage() {
   };
 
   const handleExit = () => {
-    navigate("/user/game"); // 게임 선택 페이지로
+    navigate("/user/game");
   };
+  
+  const handleAcidRain = () => {
+    if (wordList.length === 0) {
+      alert("산성비 모드로 전환할 단어가 없습니다.");
+      return;
+    }
 
+    navigate("/user/game/acid-rain", {
+      state: { wordList, from: origin || "preset" },
+    });
+  };
 
   return (
     <>
@@ -63,6 +74,11 @@ export default function ResultPage() {
             <button className="wordgame-nav-btn" onClick={handleExit}>
               게임 종료
             </button>
+            {wordList.length > 0 && (
+              <button className="wordgame-nav-btn" onClick={handleAcidRain}>
+                산성비
+              </button>
+            )}
           </div>
         </div>
       </div>

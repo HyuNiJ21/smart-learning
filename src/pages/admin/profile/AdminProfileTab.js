@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "../../../../styles/profile/Tabs.css";
-import basicUser from "../../../../assets/basicUser.png";
+import React, { useState } from "react";
+import "../../../styles/profile/Tabs.css";
+import adminImg from "../../../assets/basicUser.png";
 
-function ProfileTab({ onNavigatePassword }) {
-  const [nickname, setNickname] = useState("사과");
-  const [profileImg, setProfileImg] = useState(basicUser);
-
-  // localStorage 불러오기
-  useEffect(() => {
-    const savedNickname = localStorage.getItem("nickname");
-    const savedImg = localStorage.getItem("profileImg");
-    if (savedNickname) setNickname(savedNickname);
-    if (savedImg) setProfileImg(savedImg);
-  }, []);
+function AdminProfileTab({ onNavigatePassword }) {
+  const [nickname, setNickname] = useState("관리자");
+  const [profileImg, setProfileImg] = useState(adminImg);
+  const adminId = "admin";
 
   const handleNicknameChange = () => {
-    localStorage.setItem("nickname", nickname);
-    alert("닉네임이 변경되었습니다");
+    alert("관리자 닉네임이 변경되었습니다.");
   };
 
   const handleImageChange = (e) => {
@@ -25,7 +17,6 @@ function ProfileTab({ onNavigatePassword }) {
       const reader = new FileReader();
       reader.onload = () => {
         setProfileImg(reader.result);
-        localStorage.setItem("profileImg", reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -38,8 +29,9 @@ function ProfileTab({ onNavigatePassword }) {
         {/* 프로필 이미지 + 닉네임 */}
         <div className="profile-header">
           <div className="profile-photo">
-            <img src={profileImg} alt="profile" />
+            <img src={profileImg} alt="admin" />
           </div>
+
           <div className="profile-nickname">
             <label>닉네임</label>
             <input
@@ -47,10 +39,12 @@ function ProfileTab({ onNavigatePassword }) {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />
+
             <div className="nickname-btns">
               <label htmlFor="imgUpload" className="small-btn gray">
                 사진변경
               </label>
+
               <input
                 type="file"
                 id="imgUpload"
@@ -58,6 +52,7 @@ function ProfileTab({ onNavigatePassword }) {
                 onChange={handleImageChange}
                 style={{ display: "none" }}
               />
+
               <button className="small-btn" onClick={handleNicknameChange}>
                 닉네임 변경
               </button>
@@ -65,21 +60,11 @@ function ProfileTab({ onNavigatePassword }) {
           </div>
         </div>
 
-        {/* 레벨 표시 */}
-        <div className="profile-level">
-          <p>
-            <strong>레벨</strong> Lv.10
-          </p>
-          <div className="level-bar">
-            <div className="level-fill" style={{ width: "45%" }}></div>
-          </div>
-        </div>
-
         {/* 아이디 / 비밀번호 */}
         <div className="profile-info">
           <div className="info-row">
             <label>아이디</label>
-            <input type="text" value="testuser" readOnly />
+            <input type="text" value={adminId} readOnly />
           </div>
         </div>
 
@@ -95,4 +80,4 @@ function ProfileTab({ onNavigatePassword }) {
   );
 }
 
-export default ProfileTab;
+export default AdminProfileTab;

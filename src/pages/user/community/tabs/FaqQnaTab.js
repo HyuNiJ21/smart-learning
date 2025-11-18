@@ -128,8 +128,7 @@ function FaqQnaTab() {
         </div>
 
         <div className="btn-right" style={{ gap: "10px" }}>
-          <button className="common-btn" onClick={() => setEditPost(selectedPost)}>수정</button>
-          <button className="cancel-btn" onClick={() => handleDelete(selectedPost.id)}>삭제</button>
+          <button className="common-btn" onClick={() => handleDelete(selectedPost.id)}>삭제</button>
           <button className="cancel-btn" onClick={handleBackToList}>목록으로</button>
         </div>
       </div>

@@ -23,12 +23,13 @@ import WordGamePageBasic from "./pages/user/game/WordGamePageBasic";
 import WordGamePageCustom from "./pages/user/game/WordGamePageCustom";
 import WordQuizPage from "./pages/user/game/WordQuizPage";
 import ResultPage from "./pages/user/game/ResultPage";
+import AcidRainPage from "./pages/user/game/AcidRainPage";
 /* 전역 저장소 */
 import { WordSetProvider } from "./context/WordSetContext";
 
 /* 관리자 페이지 */
 import MainAdmin from "./pages/admin/MainAdmin";
-import AdminSettingPage from "./pages/admin/AdminSettingPage";
+import AdminProfilePage from "./pages/admin/profile/AdminProfilePage";
 import AdminCommunity from "./pages/admin/AdminCommunity";
 import AdminCharacter from "./pages/admin/AdminCharacter";
 import AdminGame from "./pages/admin/AdminGame";
@@ -48,11 +49,13 @@ function App() {
 
           {/* 관리자 전용 */}
           <Route path="/admin/main" element={isAdmin ? <MainAdmin /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/settings" element={isAdmin ? <AdminSettingPage /> : <Navigate to="/home/before" />} />
+          <Route path="/admin/profile" element={isAdmin ? <AdminProfilePage /> : <Navigate to="/home/before" />} />
           <Route path="/admin/character" element={isAdmin ? <AdminCharacter /> : <Navigate to="/home/before" />} />
           <Route path="/admin/game" element={isAdmin ? <AdminGame /> : <Navigate to="/home/before" />} />
           <Route path="/admin/ranking" element={isAdmin ? <AdminRanking /> : <Navigate to="/home/before" />} />
           <Route path="/admin/community" element={isAdmin ? <AdminCommunity /> : <Navigate to="/home/before" />} />
+          <Route path="/admin/setting" element={localStorage.getItem("role") === "admin" ? (<AdminProfilePage />) : (<Navigate to="/home/before" replace />)}/>
+          <Route path="/admin/profile" element={localStorage.getItem("role") === "admin" ? (<AdminProfilePage />) : (<Navigate to="/home/before" replace />)}/>
 
           {/* 인증 관련 */}
           <Route path="/user/auth/Login" element={<Login />} />
@@ -80,6 +83,7 @@ function App() {
           <Route path="/user/game/upload" element={<WordGamePageCustom />} />
           <Route path="/user/game/quiz" element={<WordQuizPage />} />
           <Route path="/user/game/result" element={<ResultPage />} />
+          <Route path="/user/game/acid-rain" element={<AcidRainPage />} />
 
           {/* 순위 */}
           <Route path="/user/ranking" element={<RankingPage/>} />
