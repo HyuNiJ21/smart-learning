@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header1.css";
 import userIcon from "../../assets/basicUser.png";
+import { Bell } from "lucide-react";
 
-function Header1({ isLoggedIn = false }) {
+function Header1({
+  isLoggedIn = false,
+  onOpenProfile,
+  onOpenSetting,
+  onOpenNotification,
+}) {
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+  const [open, setOpen] = useState(false);
 
-  const loggedIn = isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
+  const loggedIn =
+    isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
+
+  const role = localStorage.getItem("role");
 
   const handleLogoClick = () => {
-    if (loggedIn) {
-      navigate("/home/after");
-    } else {
-      navigate("/home/before");
-    }
+    if (loggedIn) navigate("/home/after");
+    else navigate("/home/before");
   };
+
+  const handleToggleDropdown = () => setOpen(!open);
+
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", clickOutside);
+    return () => document.removeEventListener("mousedown", clickOutside);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -22,14 +42,8 @@ function Header1({ isLoggedIn = false }) {
     navigate("/home/before");
   };
 
-  const handleProfileClick = () => {
-    if (loggedIn) {
-      navigate("/user/profile/view");
-    } else {
-      alert("로그인이 필요합니다.");
-      navigate("/user/auth/Login");
-    }
-  };
+  // 관리자일 경우 사용자 헤더 숨김
+  if (role === "admin") return null;
 
   return (
     <header className="header1">
@@ -37,31 +51,57 @@ function Header1({ isLoggedIn = false }) {
         스마트 학습 도우미
       </div>
 
-      <nav className="menu">
+      <nav className="menu" ref={dropdownRef}>
         {loggedIn ? (
           <>
-            <button className="menu-btn gray" onClick={handleLogout}>
-              로그아웃
-            </button>
+            <Bell
+              size={22}
+              className="alarm-icon"
+              onClick={() => {
+                if (onOpenNotification) onOpenNotification();
+                else navigate("/user/profile/view?tab=notification");
+              }}
+            />
+
             <img
               src={userIcon}
               alt="user"
               className="user-icon"
-              onClick={handleProfileClick}
+              onClick={handleToggleDropdown}
             />
+
+            {open && (
+              <div className="dropdown-menu">
+                <p
+                  onClick={() => {
+                    if (onOpenProfile) onOpenProfile();
+                    else navigate("/user/profile/view?tab=profile");
+                    setOpen(false);
+                  }}
+                >
+                  프로필
+                </p>
+
+                <p
+                  onClick={() => {
+                    if (onOpenSetting) onOpenSetting();
+                    else navigate("/user/profile/view?tab=setting");
+                    setOpen(false);
+                  }}
+                >
+                  설정
+                </p>
+
+                <p onClick={handleLogout}>로그아웃</p>
+              </div>
+            )}
           </>
         ) : (
           <>
-            <button
-              className="menu-btn"
-              onClick={() => navigate("/user/auth/Login")}
-            >
+            <button className="menu-btn" onClick={() => navigate("/user/auth/Login")}>
               로그인
             </button>
-            <button
-              className="menu-btn"
-              onClick={() => navigate("/user/auth/Register")}
-            >
+            <button className="menu-btn" onClick={() => navigate("/user/auth/Register")}>
               회원가입
             </button>
             <img src={userIcon} alt="user" className="user-icon disabled" />

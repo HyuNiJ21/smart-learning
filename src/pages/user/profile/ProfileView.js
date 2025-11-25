@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../../styles/profile/ProfileView.css";
 import Header1 from "../../../components/common/Header1";
 import Header2 from "../../../components/common/Header2";
@@ -9,13 +10,33 @@ import NotificationTab from "./tabs/NotificationTab";
 import SettingsTab from "./tabs/SettingsTab";
 
 function ProfileView() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const getTabFromURL = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("tab") || "profile";
+  }, [location.search]);
+
+  const [activeTab, setActiveTab] = useState(getTabFromURL());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // URL이 바뀔 때마다 tab 동기화
+  useEffect(() => {
+    setActiveTab(getTabFromURL());
+  }, [location.search, getTabFromURL]);
+
+  // 로그인 여부
   useEffect(() => {
     const loginStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loginStatus);
   }, []);
+
+  // 공통 탭 이동 함수
+  const goToTab = (tabName) => {
+    navigate(`/user/profile/view?tab=${tabName}`);
+    setActiveTab(tabName);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -31,26 +52,71 @@ function ProfileView() {
       case "setting":
         return <SettingsTab setActiveTab={setActiveTab} />;
       case "notification":
-        return <NotificationTab setActiveTab={setActiveTab} />;
+        return <NotificationTab />;
       default:
         return <ProfileTab setActiveTab={setActiveTab} />;
     }
   };
 
+  const isNotification = activeTab === "notification";
+
   return (
     <>
-      {/* 상단 헤더만 표시 */}
-      <Header1 isLoggedIn={isLoggedIn} />
+      <Header1
+        isLoggedIn={isLoggedIn}
+        onOpenProfile={() => goToTab("profile")}
+        onOpenSetting={() => goToTab("setting")}
+        onOpenNotification={() => goToTab("notification")}
+      />
       <Header2 isLoggedIn={isLoggedIn} />
 
-      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
-      <div className="profile-wrapper">
-        <aside className="profile-sidebar-container">
-          <ProfileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        </aside>
+      <div
+        className="page-content"
+        style={{
+          paddingTop: "93px",
+          minHeight: "calc(100vh - 93px)",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          className="profile-wrapper"
+          style={
+            isNotification
+              ? {
+                  display: "flex",
+                  justifyContent: "center",
+                }
+              : {}
+          }
+        >
+          {/* 알림이 아닐 때만 사이드바 표시 */}
+          {!isNotification && (
+            <aside className="profile-sidebar-container">
+              <ProfileSidebar
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                goToTab={goToTab}
+              />
+            </aside>
+          )}
 
-        <main className="profile-main-content">{renderContent()}</main>
-      </div></div>
+          {/* 알림일 때 폭 줄여서 가운데 정렬 */}
+          <main
+            className="profile-main-content"
+            style={
+              isNotification
+                ? {
+                    width: "100%",
+                    maxWidth: "600px",
+                    margin: "0 auto",
+                  }
+                : {}
+            }
+          >
+            {renderContent()}
+          </main>
+        </div>
+      </div>
     </>
   );
 }

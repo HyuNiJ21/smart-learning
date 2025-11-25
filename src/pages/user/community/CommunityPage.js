@@ -40,19 +40,19 @@ function CommunityPage() {
         {/* 왼쪽 사이드바 */}
         <div className="community-sidebar-container">
           <div className="profile-sidebar">
-            <p className="sidebar-title">커뮤니티</p>
+            <p className="sidebar-title">공지 및 커뮤니티</p>
             <ul>
-              <li
-                className={activeTab === "faq" ? "active" : ""}
-                onClick={() => setActiveTab("faq")}
-              >
-                FAQ & 1:1 문의
-              </li>
               <li
                 className={activeTab === "notice" ? "active" : ""}
                 onClick={() => setActiveTab("notice")}
               >
                 공지사항
+              </li>
+              <li
+                className={activeTab === "faq" ? "active" : ""}
+                onClick={() => setActiveTab("faq")}
+              >
+                FAQ & 1:1 문의
               </li>
             </ul>
           </div>

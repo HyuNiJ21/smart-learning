@@ -1,6 +1,6 @@
 .before-login-container {
   background-color: #FFEEB5;
-  height: calc(100vh - 140px); /* 헤더,푸터 제외 높이*/
+  height: calc(100vh - 140px);
   display: flex;
   justify-content: center;
   align-items: center;

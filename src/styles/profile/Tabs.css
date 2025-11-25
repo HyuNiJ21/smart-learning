@@ -539,3 +539,14 @@ h2 {
 .nav-links span:hover {
   color: #000;
 }
+
+/* 알림 페이지 박스 폭 줄이기 */
+.notification-tab {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.notification-list {
+  max-width: 600px;
+  margin: 0 auto;
+}

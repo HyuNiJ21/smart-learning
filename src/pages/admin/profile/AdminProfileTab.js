@@ -5,7 +5,8 @@ import adminImg from "../../../assets/basicUser.png";
 function AdminProfileTab({ onNavigatePassword }) {
   const [nickname, setNickname] = useState("관리자");
   const [profileImg, setProfileImg] = useState(adminImg);
-  const adminId = "admin";
+  
+  const adminEmail = localStorage.getItem("adminEmail") || "admin@smart.com";
 
   const handleNicknameChange = () => {
     alert("관리자 닉네임이 변경되었습니다.");
@@ -60,11 +61,11 @@ function AdminProfileTab({ onNavigatePassword }) {
           </div>
         </div>
 
-        {/* 아이디 / 비밀번호 */}
+        {/* Email */}
         <div className="profile-info">
-          <div className="info-row">
-            <label>아이디</label>
-            <input type="text" value={adminId} readOnly />
+          <div className="profile-info-row horizontal">
+            <label>Email</label>
+            <div className="info-display">{adminEmail}</div>
           </div>
         </div>
 

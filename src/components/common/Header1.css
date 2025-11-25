@@ -33,15 +33,16 @@
   gap: 10px;
 }
 
-/* 로그인 전 (비활성) */
-.menu-btn{
+/* 로그인 전 버튼 */
+.menu-btn {
   background: none;
   border: none;
   color: #9CA2AE;
   cursor: pointer;
+  font-size: 14px;
 }
 
-/* 로그인 후 (활성) */
+/* 로그인 후 버튼 */
 .menu-btn.gray {
   background: none;
   border: none;
@@ -57,13 +58,95 @@
   transition: transform 0.2s;
 }
 
+/* 프로필 hover */
 .user-icon:hover {
   transform: scale(1.1);
 }
 
-/* 로그아웃 */
-.logout {
-  color: #888;
-  text-decoration: none;
-  font-weight: 500;
+/* 비활성화된 아이콘 (로그인 전) */
+.user-icon.disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* 알림 아이콘 */
+.alarm-icon {
+  cursor: pointer;
+  margin-right: 8px;
+  color: #4d4d4d;
+}
+
+.alarm-icon:hover {
+  transform: scale(1.1);
+  transition: 0.2s;
+}
+
+/* 드롭다운 전체 */
+.dropdown-menu {
+  position: absolute;
+  top: 55px;
+  right: 40px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 150px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  animation: fadeIn 0.2s ease;
+  z-index: 2000;
+}
+
+/* 드롭다운 내부 p 태그 */
+.dropdown-menu p {
+  margin: 0;
+  padding: 12px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+/* 드롭다운 hover */
+.dropdown-menu p:hover {
+  background: #f4f4f4;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 알림 아이콘 */
+.alarm-icon {
+  margin-right: 14px;
+  cursor: pointer;
+}
+
+/* 드롭다운 메뉴 */
+.menu {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 6px 0;
+  min-width: 120px;
+  z-index: 1200;
+}
+
+.dropdown-menu p {
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dropdown-menu p:hover {
+  background-color: #f5f5f5;
 }

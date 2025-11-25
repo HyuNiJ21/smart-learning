@@ -35,8 +35,13 @@ import AdminCharacter from "./pages/admin/AdminCharacter";
 import AdminGame from "./pages/admin/AdminGame";
 import AdminRanking from "./pages/admin/AdminRanking";
 
+function RequireAdmin({ children }) {
+  const role = localStorage.getItem("role");
+  return role === "admin" ? children : <Navigate to="/home/before" replace />;
+}
+
 function App() {
-  const isAdmin = localStorage.getItem("role") === "admin";
+  //const isAdmin = localStorage.getItem("role") === "admin";
 
   return (
     <WordSetProvider>
@@ -48,15 +53,14 @@ function App() {
           <Route path="/home/after" element={<MainAfterLogin />} />
 
           {/* 관리자 전용 */}
-          <Route path="/admin/main" element={isAdmin ? <MainAdmin /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/profile" element={isAdmin ? <AdminProfilePage /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/character" element={isAdmin ? <AdminCharacter /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/game" element={isAdmin ? <AdminGame /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/ranking" element={isAdmin ? <AdminRanking /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/community" element={isAdmin ? <AdminCommunity /> : <Navigate to="/home/before" />} />
-          <Route path="/admin/setting" element={localStorage.getItem("role") === "admin" ? (<AdminProfilePage />) : (<Navigate to="/home/before" replace />)}/>
-          <Route path="/admin/profile" element={localStorage.getItem("role") === "admin" ? (<AdminProfilePage />) : (<Navigate to="/home/before" replace />)}/>
-
+          <Route path="/admin/main" element={<RequireAdmin><MainAdmin /></RequireAdmin>} />
+          <Route path="/admin/profile" element={<RequireAdmin><AdminProfilePage /></RequireAdmin>} />
+          <Route path="/admin/character" element={<RequireAdmin><AdminCharacter /></RequireAdmin>} />
+          <Route path="/admin/game" element={<RequireAdmin><AdminGame /></RequireAdmin>} />
+          <Route path="/admin/ranking" element={<RequireAdmin><AdminRanking /></RequireAdmin>} />
+          <Route path="/admin/community" element={<RequireAdmin><AdminCommunity /></RequireAdmin>} />
+          <Route path="/admin/setting" element={<RequireAdmin><AdminProfilePage /></RequireAdmin>} />
+          
           {/* 인증 관련 */}
           <Route path="/user/auth/Login" element={<Login />} />
           <Route path="/user/auth/Register" element={<Register />} />

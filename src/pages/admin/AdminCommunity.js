@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/community/Community.css";
 import "../../styles/community/Tabs.css";
 
@@ -9,8 +9,16 @@ import AdminFaqTab from "./adminTabs/AdminFaqTab";
 import AdminNoticeTab from "./adminTabs/AdminNoticeTab";
 import AdminQnaTab from "./adminTabs/AdminQnaTab";
 
+import { useLocation } from "react-router-dom";
+
 export default function AdminCommunity() {
   const [activeTab, setActiveTab] = useState("faq");
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.defaultTab === "notice") {
+      setActiveTab("notice");
+    }
+  }, [location.state]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -34,7 +42,7 @@ export default function AdminCommunity() {
       <div className="community-wrapper">
         <div className="community-sidebar-container">
           <div className="profile-sidebar">
-            <p className="sidebar-title">관리자 커뮤니티</p>
+            <p className="sidebar-title">공지 및 문의사항</p>
             <ul>
               <li className={activeTab === "notice" ? "active" : ""} onClick={() => setActiveTab("notice")}>
                 공지사항 관리
