@@ -41,7 +41,6 @@ function AdminNotificationTab() {
 
   return (
     <div className="tab-inner notification-tab">
-      <h3>관리자 알림</h3>
 
       <div className="notification-list">
         {notifications.map((n) => (

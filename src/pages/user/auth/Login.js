@@ -45,6 +45,7 @@ function Login() {
       <Header1 isLoggedIn={false} />
       <Header2 isLoggedIn={false} />
 
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
       <div className="login-container">
         <div className="login-box">
           <h2>
@@ -98,6 +99,7 @@ function Login() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

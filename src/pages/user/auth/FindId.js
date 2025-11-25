@@ -46,6 +46,7 @@ function FindId() {
       <Header1 isLoggedIn={false} />
       <Header2 isLoggedIn={false} />
 
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
       <div className="findid-container">
         <div className="findid-box">
           <h2>찾고자하는 아이디의 이메일을 입력해주세요.</h2>
@@ -75,6 +76,7 @@ function FindId() {
           </div>
         </div>
       )}
+      </div>
     </>
   );
 }

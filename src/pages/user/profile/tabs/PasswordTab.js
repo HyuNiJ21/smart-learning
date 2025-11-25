@@ -51,7 +51,6 @@ function PasswordTab({ onBack }) {
 
   return (
     <div className="tab-inner password-main">
-      <h3>비밀번호 변경</h3>
 
       <form onSubmit={handleSubmit} className="password-box">
         <div className="pw-row">

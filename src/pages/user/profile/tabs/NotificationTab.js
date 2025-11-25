@@ -37,7 +37,6 @@ function NotificationTab() {
 
   return (
     <div className="tab-inner notification-tab">
-      <h3>알림</h3>
 
       <div className="notification-list">
         {notifications.map((n) => (

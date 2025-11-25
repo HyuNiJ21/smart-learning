@@ -1,5 +1,15 @@
 /* 공통 카드 */
-.profile-box, .password-box {
+.profile-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 30px 40px;
+  width: 700px;
+  margin: 0 auto;
+  box-shadow: none;
+}
+
+.password-box {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 15px;
@@ -83,6 +93,9 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 8px;
+  box-shadow: none !important;
+  outline: none !important;
+  background: white !important;
 }
 
 /* 버튼 */

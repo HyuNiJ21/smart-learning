@@ -46,6 +46,7 @@ function FindPw() {
       <Header1 isLoggedIn={false} />
       <Header2 isLoggedIn={false} />
 
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
       <div className="findpw-container">
         <div className="findpw-box">
           <h2>찾고자하는 비밀번호의 아이디를 입력해주세요.</h2>
@@ -80,6 +81,7 @@ function FindPw() {
           </div>
         </div>
       )}
+      </div>
     </>
   );
 }

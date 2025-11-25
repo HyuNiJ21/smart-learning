@@ -219,7 +219,7 @@ export default function WordGamePageCustom() {
             className="wordgame-nav-btn"
             onClick={downloadExcelTemplate}
           >
-            엑셀 다운로드
+            엑셀 형식 다운로드
           </button>
         </div>
 

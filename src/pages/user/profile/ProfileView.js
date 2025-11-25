@@ -43,13 +43,14 @@ function ProfileView() {
       <Header1 isLoggedIn={isLoggedIn} />
       <Header2 isLoggedIn={isLoggedIn} />
 
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
       <div className="profile-wrapper">
         <aside className="profile-sidebar-container">
           <ProfileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         </aside>
 
         <main className="profile-main-content">{renderContent()}</main>
-      </div>
+      </div></div>
     </>
   );
 }

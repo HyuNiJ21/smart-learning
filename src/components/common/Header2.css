@@ -5,6 +5,11 @@
   padding: 12px 0;
   background-color: #fff;
   border-bottom: 1px solid #eee;
+  position: fixed;
+  top: 59px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
 }
 
 /* 메뉴 */

@@ -75,11 +75,11 @@ function ProfileTab({ onNavigatePassword }) {
           </div>
         </div>
 
-        {/* 아이디 / 비밀번호 */}
+        {/* Email */}
         <div className="profile-info">
-          <div className="info-row">
-            <label>아이디</label>
-            <input type="text" value="testuser" readOnly />
+          <div className="profile-info-row horizontal">
+            <label>Email</label>
+            <div className="info-display">testuser</div>
           </div>
         </div>
 

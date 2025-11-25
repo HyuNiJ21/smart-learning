@@ -44,55 +44,59 @@ function NoticeDetail() {
       {/* 상단 헤더 */}
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
-
-      {/* 전체 커뮤니티 구조 유지 */}
-      <div className="community-wrapper">
-        {/* 사이드바 */}
-        <div className="community-sidebar-container">
-          <div className="profile-sidebar">
-            <p className="sidebar-title">커뮤니티</p>
-            <ul>
-              <li onClick={() => navigate("/user/community")}>FAQ & 1:1 문의</li>
-              <li className="active" onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}>
-                공지사항
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* 오른쪽 내용 */}
-        <div className="community-main-content">
-          <div className="tab-inner notice-tab">
-            <div className="write-form">
-              <h2>{item.title}</h2>
-              <hr />
-              <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{item.content}</p>
-              <p style={{ color: "#777", marginTop: "10px" }}>작성시간: {item.time}</p>
-            </div>
-
-            {/* 버튼 영역 */}
-            <div className="btn-right" style={{ gap: "6px", marginTop: "12px" }}>
-              <button
-                className="common-btn small-btn"
-                onClick={handlePrev}
-              >
-                {"< 이전글"}
-              </button>
-              <button
-                className="common-btn small-btn"
-                onClick={handleNext}
-              >
-                {"다음글 >"}
-              </button>
-              <button
-                className="cancel-btn small-btn"
-                onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}
-              >
-                목록으로
-              </button>
+      
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+        {/* 전체 커뮤니티 구조 유지 */}
+        <div className="community-wrapper">
+          {/* 사이드바 */}
+          <div className="community-sidebar-container">
+            <div className="profile-sidebar">
+              <p className="sidebar-title">커뮤니티</p>
+              <ul>
+                <li onClick={() => navigate("/user/community")}>FAQ & 1:1 문의</li>
+                <li className="active" onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}>
+                  공지사항
+                </li>
+              </ul>
             </div>
           </div>
+
+          {/* 오른쪽 내용 */}
+          <div className="community-main-content">
+            <div className="tab-inner notice-tab">
+              <div className="write-form">
+                <h2>{item.title}</h2>
+                <hr />
+                <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{item.content}</p>
+                <p style={{ color: "#777", marginTop: "10px" }}>작성시간: {item.time}</p>
+              </div>
+
+              {/* 버튼 영역 */}
+              <div className="btn-right" style={{ gap: "6px", marginTop: "12px" }}>
+                <button
+                  className="common-btn small-btn"
+                  onClick={handlePrev}
+                >
+                  {"< 이전글"}
+                </button>
+                <button
+                  className="common-btn small-btn"
+                  onClick={handleNext}
+                >
+                  {"다음글 >"}
+                </button>
+                <button
+                  className="cancel-btn small-btn"
+                  onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}
+                >
+                  목록으로
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
     </>
   );

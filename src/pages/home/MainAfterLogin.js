@@ -36,6 +36,7 @@ function MainAfterLogin() {
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
       <div className="afterlogin-container">
         {/* 캘린더 */}
         <div className="card-group">
@@ -97,7 +98,7 @@ function MainAfterLogin() {
         </div>
       </div>
 
-      <Footer />
+      <Footer /></div>
     </>
   );
 }

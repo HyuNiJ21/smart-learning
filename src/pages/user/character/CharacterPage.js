@@ -70,155 +70,157 @@ function CharacterPage() {
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
-      <div className="character-page">
-        <div className="character-container">
-          <div className="character-left">{renderCharacterImage()}</div>
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+        <div className="character-page">
+          <div className="character-container">
+            <div className="character-left">{renderCharacterImage()}</div>
 
-          <div className="character-right">
-            {mode === "view" && (
-              <div className="character-card">
-                <h2 className="character-title">캐릭터</h2>
+            <div className="character-right">
+              {mode === "view" && (
+                <div className="character-card">
+                  <h2 className="character-title">캐릭터</h2>
 
-                <div className="info-row">
-                  <span className="label">이름</span>
-                  <span className="value">{name}</span>
+                  <div className="info-row">
+                    <span className="label">이름</span>
+                    <span className="value">{name}</span>
+                  </div>
+
+                  <div className="info-row">
+                    <span className="label">레벨</span>
+                    <span className="value">{userLevel} level</span>
+                  </div>
+
+                  <div className="btn-group">
+                    <button
+                      onClick={() => setMode("rename")}
+                      className="yellow-btn"
+                    >
+                      캐릭터 이름 변경
+                    </button>
+                    <button
+                      onClick={() => setMode("change")}
+                      className="yellow-btn"
+                    >
+                      캐릭터 변경
+                    </button>
+                  </div>
                 </div>
+              )}
 
-                <div className="info-row">
-                  <span className="label">레벨</span>
-                  <span className="value">{userLevel} level</span>
+              {mode === "rename" && (
+                <div className="character-card">
+                  <h2 className="character-title">캐릭터 이름 변경</h2>
+
+                  <div className="info-row">
+                    <span className="label">변경 전 이름</span>
+                    <span className="value">{name}</span>
+                  </div>
+
+                  <div className="info-row">
+                    <span className="label">새로운 이름</span>
+                    <input
+                      type="text"
+                      placeholder="새 이름 입력"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      className="input-box"
+                    />
+                  </div>
+
+                  <div className="btn-group">
+                    <button onClick={handleNameChange} className="yellow-btn">
+                      이름 변경
+                    </button>
+                    <button
+                      onClick={() => setMode("view")}
+                      className="gray-btn"
+                    >
+                      취소
+                    </button>
+                  </div>
                 </div>
+              )}
 
-                <div className="btn-group">
-                  <button
-                    onClick={() => setMode("rename")}
-                    className="yellow-btn"
-                  >
-                    캐릭터 이름 변경
-                  </button>
-                  <button
-                    onClick={() => setMode("change")}
-                    className="yellow-btn"
-                  >
-                    캐릭터 변경
-                  </button>
-                </div>
-              </div>
-            )}
+              {mode === "change" && (
+                <div className="character-card">
+                  <h2 className="character-title">캐릭터 변경</h2>
 
-            {mode === "rename" && (
-              <div className="character-card">
-                <h2 className="character-title">캐릭터 이름 변경</h2>
+                  <div className="carousel-wrapper">
+                    <button className="arrow-btn left" onClick={handlePrev}>
+                      &lt;
+                    </button>
 
-                <div className="info-row">
-                  <span className="label">변경 전 이름</span>
-                  <span className="value">{name}</span>
-                </div>
+                    <div className="character-carousel">
+                      {visibleCharacters.map((char) => {
+                        const locked = userLevel < char.minLevel;
+                        const isSelected = character === char.img;
 
-                <div className="info-row">
-                  <span className="label">새로운 이름</span>
-                  <input
-                    type="text"
-                    placeholder="새 이름 입력"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    className="input-box"
-                  />
-                </div>
-
-                <div className="btn-group">
-                  <button onClick={handleNameChange} className="yellow-btn">
-                    이름 변경
-                  </button>
-                  <button
-                    onClick={() => setMode("view")}
-                    className="gray-btn"
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {mode === "change" && (
-              <div className="character-card">
-                <h2 className="character-title">캐릭터 변경</h2>
-
-                <div className="carousel-wrapper">
-                  <button className="arrow-btn left" onClick={handlePrev}>
-                    &lt;
-                  </button>
-
-                  <div className="character-carousel">
-                    {visibleCharacters.map((char) => {
-                      const locked = userLevel < char.minLevel;
-                      const isSelected = character === char.img;
-
-                      return (
-                        <div
-                          key={char.id}
-                          className={`character-option ${
-                            isSelected ? "selected" : ""
-                          } ${locked ? "locked" : ""}`}
-                          onClick={() =>
-                            !locked &&
-                            handleCharacterChange(char.img, char.minLevel)
-                          }
-                        >
-                          <div className="character-image-container">
-                            <img
-                              src={char.img}
-                              alt={char.name}
-                              className="select-img"
-                            />
-                            {locked && (
-                              <img
-                                src={lockIcon}
-                                alt="잠금"
-                                className="lock-icon"
-                              />
-                            )}
-                          </div>
-
-                          <p>
-                            {char.name}
-                            {locked && (
-                              <span className="locked-text">
-                                {" "}
-                                (Lv.{char.minLevel})
-                              </span>
-                            )}
-                          </p>
-
-                          <button
-                            className="yellow-btn"
-                            disabled={locked}
+                        return (
+                          <div
+                            key={char.id}
+                            className={`character-option ${
+                              isSelected ? "selected" : ""
+                            } ${locked ? "locked" : ""}`}
                             onClick={() =>
+                              !locked &&
                               handleCharacterChange(char.img, char.minLevel)
                             }
                           >
-                            {locked ? "잠김" : "선택"}
-                          </button>
-                        </div>
-                      );
-                    })}
+                            <div className="character-image-container">
+                              <img
+                                src={char.img}
+                                alt={char.name}
+                                className="select-img"
+                              />
+                              {locked && (
+                                <img
+                                  src={lockIcon}
+                                  alt="잠금"
+                                  className="lock-icon"
+                                />
+                              )}
+                            </div>
+
+                            <p>
+                              {char.name}
+                              {locked && (
+                                <span className="locked-text">
+                                  {" "}
+                                  (Lv.{char.minLevel})
+                                </span>
+                              )}
+                            </p>
+
+                            <button
+                              className="yellow-btn"
+                              disabled={locked}
+                              onClick={() =>
+                                handleCharacterChange(char.img, char.minLevel)
+                              }
+                            >
+                              {locked ? "잠김" : "선택"}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button className="arrow-btn right" onClick={handleNext}>
+                      &gt;
+                    </button>
                   </div>
 
-                  <button className="arrow-btn right" onClick={handleNext}>
-                    &gt;
-                  </button>
+                  <div className="btn-group">
+                    <button
+                      onClick={() => setMode("view")}
+                      className="gray-btn"
+                    >
+                      취소
+                    </button>
+                  </div>
                 </div>
-
-                <div className="btn-group">
-                  <button
-                    onClick={() => setMode("view")}
-                    className="gray-btn"
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

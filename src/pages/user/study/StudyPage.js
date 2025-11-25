@@ -79,7 +79,6 @@ function StudyPage() {
   };
 
   const formatTimer = (t) => {
-    const ms = String(Math.floor((t / 10) % 100)).padStart(2, "0");
     const s = String(Math.floor((t / 1000) % 60)).padStart(2, "0");
     const m = String(Math.floor((t / 60000) % 60)).padStart(2, "0");
     const h = String(Math.floor((t / 3600000) % 60)).padStart(2, "0");
@@ -116,36 +115,39 @@ function StudyPage() {
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
-      <div className="study-container">
-        <div className="timer-box">
-          <div
-            className="timer-circle"
-            style={{
-              background: `conic-gradient(${blendedColor} ${progress}deg, #fff 0deg)`,
-            }}
-          >
-            <div className="timer-inner">
-              <div className="timer-text">{formatTimer(time)}</div>
+      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+        <div className="study-container">
+          <div className="timer-box">
+            <div
+              className="timer-circle"
+              style={{
+                background: `conic-gradient(${blendedColor} ${progress}deg, #fff 0deg)`,
+              }}
+            >
+              <div className="timer-inner">
+                <div className="timer-text">{formatTimer(time)}</div>
+              </div>
+            </div>
+
+            <div className="timer-btns">
+              <button className="timer-btn" onClick={() => setRunning(!running)}>
+                {running ? "STOP" : "START"}
+              </button>
             </div>
           </div>
 
-          <div className="timer-btns">
-            <button className="timer-btn" onClick={() => setRunning(!running)}>
-              {running ? "STOP" : "START"}
-            </button>
+          <div className="record-box">
+            <div className="record-title">공부 기록</div>
+            <div className="record-item">
+              <span>이번 주 공부 시간</span>
+              <span>{formatTime(weekStudy)}</span>
+            </div>
+            <div className="record-item">
+              <span>오늘의 공부 시간</span>
+              <span>{formatTime(todayStudy)}</span>
+            </div>
           </div>
-        </div>
 
-        <div className="record-box">
-          <div className="record-title">공부 기록</div>
-          <div className="record-item">
-            <span>이번 주 공부 시간</span>
-            <span>{formatTime(weekStudy)}</span>
-          </div>
-          <div className="record-item">
-            <span>오늘의 공부 시간</span>
-            <span>{formatTime(todayStudy)}</span>
-          </div>
         </div>
       </div>
     </>
