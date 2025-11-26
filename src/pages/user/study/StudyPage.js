@@ -6,11 +6,19 @@ import "../../../styles/study/StudyPage.css";
 function StudyPage() {
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
+
   const [todayStudy, setTodayStudy] = useState(0);
   const [weekStudy, setWeekStudy] = useState(0);
+
+  const [subjects, setSubjects] = useState([]);
+  const [subjectInput, setSubjectInput] = useState("");
+  const [currentSubject, setCurrentSubject] = useState("");
+  const [subjectTimes, setSubjectTimes] = useState({});
+
+  const [showModal, setShowModal] = useState(false);
+
   const timerRef = useRef(null);
 
-  // 
   const getTodayKey = () => new Date().toISOString().split("T")[0];
   const getWeekKey = () => {
     const now = new Date();
@@ -18,7 +26,14 @@ function StudyPage() {
     return monday.toISOString().split("T")[0];
   };
 
-  // 
+  // 카테고리 선택 시 타이머 리셋
+  const handleSubjectChange = (name) => {
+    setCurrentSubject(name);
+    setTime(0);
+    setRunning(false);
+  };
+
+  // 초기 로드
   useEffect(() => {
     const weekKey = getWeekKey();
     const todayKey = getTodayKey();
@@ -36,10 +51,11 @@ function StudyPage() {
       setTodayStudy(0);
     } else setTodayStudy(storedToday.time || 0);
 
-    
+    setSubjects(JSON.parse(localStorage.getItem("subjects") || "[]"));
+    setSubjectTimes(JSON.parse(localStorage.getItem("subjectTimes") || "{}"));
   }, []);
 
-  // 
+  // 타이머 작동
   useEffect(() => {
     if (running) {
       timerRef.current = setInterval(() => setTime((t) => t + 10), 10);
@@ -49,7 +65,7 @@ function StudyPage() {
     return () => clearInterval(timerRef.current);
   }, [running]);
 
-  //
+  // 1초마다 증가
   useEffect(() => {
     if (!running || time === 0) return;
 
@@ -57,20 +73,60 @@ function StudyPage() {
     const weekKey = getWeekKey();
 
     if (time % 1000 === 0) {
-      setWeekStudy((prev) => {
-        const updated = prev + 1;
-        localStorage.setItem("weekStudy", JSON.stringify({ date: weekKey, time: updated }));
-        return updated;
-      });
       setTodayStudy((prev) => {
         const updated = prev + 1;
         localStorage.setItem("todayStudy", JSON.stringify({ date: todayKey, time: updated }));
         return updated;
       });
-    }
-  }, [time, running]);
 
-  //
+      setWeekStudy((prev) => {
+        const updated = prev + 1;
+        localStorage.setItem("weekStudy", JSON.stringify({ date: weekKey, time: updated }));
+        return updated;
+      });
+
+      if (currentSubject) {
+        setSubjectTimes((prev) => {
+          const updated = {
+            ...prev,
+            [currentSubject]: (prev[currentSubject] || 0) + 1,
+          };
+          localStorage.setItem("subjectTimes", JSON.stringify(updated));
+          return updated;
+        });
+      }
+    }
+  }, [time, running, currentSubject]);
+
+  // 카테고리 추가
+  const addSubject = () => {
+    if (!subjectInput.trim()) return;
+    if (subjects.includes(subjectInput.trim())) {
+      alert("이미 존재하는 카테고리입니다.");
+      return;
+    }
+
+    const updated = [...subjects, subjectInput.trim()];
+    setSubjects(updated);
+    localStorage.setItem("subjects", JSON.stringify(updated));
+    setSubjectInput("");
+  };
+
+  // 카테고리 삭제
+  const deleteSubject = (name) => {
+    const updatedSubjects = subjects.filter((s) => s !== name);
+    const updatedTimes = { ...subjectTimes };
+    delete updatedTimes[name];
+
+    setSubjects(updatedSubjects);
+    setSubjectTimes(updatedTimes);
+
+    localStorage.setItem("subjects", JSON.stringify(updatedSubjects));
+    localStorage.setItem("subjectTimes", JSON.stringify(updatedTimes));
+
+    if (currentSubject === name) setCurrentSubject("");
+  };
+
   const formatTime = (seconds) => {
     const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
     const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
@@ -81,47 +137,62 @@ function StudyPage() {
   const formatTimer = (t) => {
     const s = String(Math.floor((t / 1000) % 60)).padStart(2, "0");
     const m = String(Math.floor((t / 60000) % 60)).padStart(2, "0");
-    const h = String(Math.floor((t / 3600000) % 60)).padStart(2, "0");
+    const h = String(Math.floor(t / 3600000)).padStart(2, "0");
     return `${h}:${m}:${s}`;
   };
 
-  //
-  const colors = ["#FFD400", "#4DA3FF", "#6DD56C", "#FF6B81", "#B26EFF"];
-  const colorCount = colors.length;
-  const fullCycle = 3600000; // 1시간 (ms)
-  const currentHour = Math.floor(time / fullCycle);
-  const nextColorIndex = (currentHour + 1) % colorCount;
-  const currentColorIndex = currentHour % colorCount;
-  const progressRatio = (time % fullCycle) / fullCycle;
-  const progress = progressRatio * 360;
-
-  //
-  const hexToRgb = (hex) => {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return [r, g, b];
-  };
-
-  const [r1, g1, b1] = hexToRgb(colors[currentColorIndex]);
-  const [r2, g2, b2] = hexToRgb(colors[nextColorIndex]);
-  const blendedColor = `rgb(${Math.round(r1 + (r2 - r1) * progressRatio)}, 
-                             ${Math.round(g1 + (g2 - g1) * progressRatio)}, 
-                             ${Math.round(b1 + (b2 - b1) * progressRatio)})`;
+  const progress = (time % 3600000) / 3600000 * 360;
+  const progressColor = "#FFD400";
 
   return (
     <>
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
-      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+      <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="study-container">
+
+          {/* 카테고리 박스 */}
+          <div className="subject-box">
+            <div className="subject-title">카테고리 관리</div>
+
+            <div className="subject-add-row">
+              <input
+                value={subjectInput}
+                onChange={(e) => setSubjectInput(e.target.value)}
+                placeholder="카테고리 입력"
+              />
+              <button onClick={addSubject}>추가</button>
+            </div>
+
+            <div className="subject-list">
+              {subjects.map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`subject-item ${currentSubject === s ? "active" : ""}`}
+                  onClick={() => handleSubjectChange(s)}
+                >
+                  <span>{s}</span>
+                  <button
+                    className="delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteSubject(s);
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 스톱워치 */}
           <div className="timer-box">
             <div
               className="timer-circle"
               style={{
-                background: `conic-gradient(${blendedColor} ${progress}deg, #fff 0deg)`,
+                background: `conic-gradient(${progressColor} ${progress}deg, #fff 0deg)`
               }}
             >
               <div className="timer-inner">
@@ -129,27 +200,65 @@ function StudyPage() {
               </div>
             </div>
 
+            <div className="current-subject">
+              현재 선택된 카테고리: <b>{currentSubject || "없음"}</b>
+            </div>
+
             <div className="timer-btns">
-              <button className="timer-btn" onClick={() => setRunning(!running)}>
+              <button
+                className="timer-btn"
+                onClick={() => {
+                  if (!currentSubject && !running) {
+                    setShowModal(true);
+                    return;
+                  }
+                  setRunning(!running);
+                }}
+              >
                 {running ? "STOP" : "START"}
               </button>
             </div>
           </div>
 
+          {/* 기록 */}
           <div className="record-box">
             <div className="record-title">공부 기록</div>
+
             <div className="record-item">
               <span>이번 주 공부 시간</span>
               <span>{formatTime(weekStudy)}</span>
             </div>
+
             <div className="record-item">
-              <span>오늘의 공부 시간</span>
+              <span>오늘 공부 시간</span>
               <span>{formatTime(todayStudy)}</span>
+            </div>
+
+            <div className="record-title">카테고리별 누적 시간</div>
+
+            <div className="subject-time-list">
+              {subjects.map((s, i) => (
+                <div key={i} className="record-item">
+                  <span>{s}</span>
+                  <span>{formatTime(subjectTimes[s] || 0)}</span>
+                </div>
+              ))}
             </div>
           </div>
 
         </div>
       </div>
+
+      {/* 모달 팝업 */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-title">카테고리 선택 필요</div>
+            <div className="modal-text">먼저 공부할 카테고리를 선택해주세요.</div>
+            <button className="modal-btn" onClick={() => setShowModal(false)}>확인</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

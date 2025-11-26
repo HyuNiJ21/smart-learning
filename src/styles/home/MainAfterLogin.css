@@ -1,23 +1,22 @@
-/* 전체 */
+/* 기존 카드 3개 영역 */
 .afterlogin-container {
   background-color: #ffeeB5;
-  min-height: calc(100vh - 220px); /* 헤더2 + 푸터 제외 */
+  padding: 20px 40px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 40px;
-  padding: 60px 40px;
   flex-wrap: wrap;
 }
 
-/* 카드 전체 그룹 */
+/* 카드 묶음 */
 .card-group {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-/* 카드 제목 (캘린더 / 캐릭터 / 사용자 레벨 순위) */
+/* 카드 제목 */
 .card-title {
   font-size: 18px;
   font-weight: 700;
@@ -39,7 +38,7 @@
   justify-content: space-between;
 }
 
-/* 카드 내용 */
+/* 카드 텍스트 */
 .card h3 {
   font-size: 16px;
   font-weight: bold;
@@ -85,7 +84,7 @@
   color: #333;
 }
 
-/* 바로가기 */
+/* 바로가기 링크  */
 .more-link {
   font-size: 13px;
   color: #FFD400;
@@ -98,4 +97,100 @@
 
 .more-link:hover {
   text-decoration: underline;
+}
+
+/* 아래 공부 통계 영역 */
+.study-stats {
+  width: 100%;
+  padding: 10px 40px 40px;
+  margin-top: 0px;
+}
+
+/* 통계 카드 가로배치 */
+.stats-row {
+  display: flex;
+  gap: 40px; 
+}
+
+/* 통계 카드 기본형 */
+.stats-card {
+  background: #fff;
+  border-radius: 12px;
+  width: 280px;
+  height: 230px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 오늘 공부 카드 */
+.today-card {
+  background: #FFF4C2;
+  border: 2px solid #FFD400;
+}
+
+/* 이번 주 공부 카드 */
+.week-card {
+  background: #EAF4FF;
+  border: 2px solid #4DA3FF;
+}
+
+/* 시간 텍스트 */
+.stats-time {
+  margin-top: 12px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #000;
+}
+
+/* 큰 통계 카드 */
+.study-stat-big {
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  margin: 20px auto;
+  padding: 30px 30px 20px;
+}
+
+/* 내부 통계 2개를 가로 배치 */
+.stats-inner-row {
+  display: flex;
+  gap: 30px;
+  margin-top: 15px;
+}
+
+/* 내부의 작은 통계 카드 */
+.stats-small-card {
+  background: #fff;
+  border-radius: 12px;
+  width: 500px;
+  height: 150px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 오늘 카드(노랑톤) */
+.today-card {
+  background: #FFF4C2;
+  border: 2px solid #FFD400;
+}
+
+/* 이번 주 카드(파랑톤) */
+.week-card {
+  background: #EAF4FF;
+  border: 2px solid #4DA3FF;
+}
+
+/* 시간 강조 텍스트 */
+.stats-time {
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 800;
 }

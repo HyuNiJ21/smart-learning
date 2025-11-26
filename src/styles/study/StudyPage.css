@@ -110,3 +110,134 @@
     width: 90%;
   }
 }
+
+/* --- 🔥 카테고리 관리 박스 추가 --- */
+
+.subject-box {
+  background: #fff7b5;
+  border-radius: 24px;
+  padding: 25px;
+  width: clamp(260px, 28vw, 300px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.subject-title {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  background: #ffd400;
+  padding: 10px 0;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.subject-add-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.subject-add-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.subject-add-row button {
+  padding: 8px 14px;
+  font-weight: bold;
+  background: #fff;
+  border: 2px solid #ffd400;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subject-item {
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.subject-item.active {
+  background: #ffe55c;
+}
+
+.subject-item .delete-btn {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* 카테고리별 시간 출력 */
+
+.subject-time-title {
+  margin-top: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  padding-left: 5px;
+}
+
+.subject-time-list {
+  margin-top: 10px;
+}
+
+.current-subject {
+  font-weight: 600;
+  margin-top: 10px;
+  font-size: 16px;
+}
+/* 왼쪽 */
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* 스크롤 */
+  max-height: calc(50px * 4);
+
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* 오른쪽 */
+.subject-time-list {
+  max-height: calc(50px * 4);
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.subject-time-list::-webkit-scrollbar,
+.subject-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subject-time-list::-webkit-scrollbar-thumb,
+.subject-list::-webkit-scrollbar-thumb {
+  background: #ffdd5e;
+  border-radius: 10px;
+}
+
+.subject-time-list::-webkit-scrollbar-track,
+.subject-list::-webkit-scrollbar-track {
+  background: #f6e9a8;
+}
+
+.subject-box,
+.record-box {
+  margin: 0 clamp(20px, 3vw, 60px);
+}
+
