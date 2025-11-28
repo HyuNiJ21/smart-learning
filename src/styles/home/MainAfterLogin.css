@@ -1,7 +1,6 @@
-/* 기존 카드 3개 영역 */
 .afterlogin-container {
   background-color: #ffeeB5;
-  padding: 20px 40px;
+  padding: 40px 40px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -9,14 +8,25 @@
   flex-wrap: wrap;
 }
 
-/* 카드 묶음 */
+/* 모든 메인 카드 통일 */
+.uniform-card {
+  background: #fff;
+  border-radius: 18px;
+  width: 280px;
+  min-height: 260px;
+  padding: 28px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 내용 위에서부터 쌓기 */
+}
+
 .card-group {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-/* 카드 제목 */
 .card-title {
   font-size: 18px;
   font-weight: 700;
@@ -25,172 +35,163 @@
   margin-bottom: 10px;
 }
 
-/* 개별 카드 */
-.card {
-  background: #fff;
-  border-radius: 12px;
-  width: 280px;
-  height: 230px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+/* ------------------------ */
+/* 캐릭터 카드 스타일 */
+/* ------------------------ */
+
+.char-section {
+  text-align: center;
 }
 
-/* 카드 텍스트 */
-.card h3 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #000;
-}
-
-.card .date {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.card ul,
-.card ol {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px 0;
-  line-height: 1.8;
-}
-
-.card li {
-  font-size: 14px;
-  color: #333;
-}
-
-/* 캐릭터 카드 */
-.character-box {
-  height: 120px;
+.character-image-box {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 12px;
+  background: #fafafa;
+  border-radius: 14px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+}
+
+.character-img-home {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.no-img-text {
   font-size: 14px;
   color: #888;
 }
 
-.character-name {
-  text-align: center;
-  font-size: 14px;
-  color: #333;
+.char-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 5px;
 }
 
-/* 바로가기 링크  */
-.more-link {
+.char-level {
   font-size: 13px;
-  color: #FFD400;
-  text-decoration: none;
+  color: #666;
+}
+
+/* ------------------------ */
+/* 통계 그래프 */
+/* ------------------------ */
+
+.study-stat-big {
+  width: 100%;
+  max-width: 1020px;
+  padding: 30px;
+  border-radius: 20px;
+  margin: 20px auto;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.stats-inner-row {
+  display: flex;
+  gap: 30px;
+}
+
+.stats-small-card {
+  flex: 1;
+  height: 220px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* 노랑 */
+.today-card {
+  background: #FFF4C2;
+  border: 2px solid #FFD400;
+}
+
+/* 파랑 */
+.week-card {
+  background: #EAF4FF;
+  border: 2px solid #4DA3FF;
+}
+
+.chart-container {
+  width: 100%;
+  height: 180px;
+  padding: 4px 0;
+}
+
+/* 그래프 제목 살짝 위로 */
+.graph-title {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+/* ------------------------ */
+/* 리스트 기본 스타일 */
+/* ------------------------ */
+
+.more-link {
+  font-size: 14px;
   font-weight: bold;
+  color: #FFD400;
   text-align: right;
-  display: block;
-  margin-top: 4px;
+  text-decoration: none;
+  margin-top: 8px;
 }
 
 .more-link:hover {
   text-decoration: underline;
 }
 
-/* 아래 공부 통계 영역 */
-.study-stats {
-  width: 100%;
-  padding: 10px 40px 40px;
-  margin-top: 0px;
+.card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-/* 통계 카드 가로배치 */
-.stats-row {
-  display: flex;
-  gap: 40px; 
+.card li {
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-/* 통계 카드 기본형 */
-.stats-card {
-  background: #fff;
-  border-radius: 12px;
-  width: 280px;
-  height: 230px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+.date {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px; /* 살짝 줄임 */
 }
 
-/* 오늘 공부 카드 */
-.today-card {
-  background: #FFF4C2;
-  border: 2px solid #FFD400;
+/* 날짜가 제목 바로 아래에 딱 붙도록 */
+.uniform-card h3 {
+  margin-bottom: 4px !important;
 }
 
-/* 이번 주 공부 카드 */
-.week-card {
-  background: #EAF4FF;
-  border: 2px solid #4DA3FF;
+.uniform-card .date {
+  margin-top: 0 !important;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #555;
 }
 
-/* 시간 텍스트 */
-.stats-time {
-  margin-top: 12px;
-  font-size: 26px;
-  font-weight: 800;
-  color: #000;
+/* ✅ 오늘의 할 일 개수 강조 */
+.todo-count {
+  color: #ff4242;  /* 눈에 잘 띄는 빨강 */
+  font-weight: 900;
 }
 
-/* 큰 통계 카드 */
-.study-stat-big {
-  width: 100%;
-  max-width: 960px;
-  height: auto;
-  margin: 20px auto;
-  padding: 30px 30px 20px;
+/* ✅ 오늘의 할 일 목록만 살짝 들여쓰기 */
+.todo-ul {
+  margin: 4px 0 0 10px;
+  padding-left: 0;
 }
 
-/* 내부 통계 2개를 가로 배치 */
-.stats-inner-row {
-  display: flex;
-  gap: 30px;
-  margin-top: 15px;
-}
-
-/* 내부의 작은 통계 카드 */
-.stats-small-card {
-  background: #fff;
-  border-radius: 12px;
-  width: 500px;
-  height: 150px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-/* 오늘 카드(노랑톤) */
-.today-card {
-  background: #FFF4C2;
-  border: 2px solid #FFD400;
-}
-
-/* 이번 주 카드(파랑톤) */
-.week-card {
-  background: #EAF4FF;
-  border: 2px solid #4DA3FF;
-}
-
-/* 시간 강조 텍스트 */
-.stats-time {
-  margin-top: 10px;
-  font-size: 26px;
-  font-weight: 800;
+/* ✅ 바로가기 버튼 오른쪽 아래 고정 */
+.card-bottom {
+  margin-top: auto;
+  text-align: right;
 }
