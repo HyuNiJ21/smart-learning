@@ -71,7 +71,6 @@ export default function CalendarPage() {
   const nextMonth = () =>
     setCurrent(new Date(current.getFullYear(), current.getMonth() + 1, 1));
 
-  /* ---------------- To-Do ---------------- */
   const saveTodo = () => {
     if (!todoTitle.trim()) return;
 
@@ -112,7 +111,6 @@ export default function CalendarPage() {
     localStorage.setItem(keyTodo, JSON.stringify(updated));
   };
 
-  /* ---------------- Diary ---------------- */
   const saveDiary = () => {
     if (!diaryTitle.trim() && !diaryContent.trim()) return;
 
@@ -138,7 +136,6 @@ export default function CalendarPage() {
     setShowDiaryModal(true);
   };
 
-  /* 날짜 비교 */
   const isSameDate = (a, b) =>
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
@@ -152,7 +149,6 @@ export default function CalendarPage() {
       <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="calendar-layout">
           
-          {/* --------------- 달력 --------------- */}
           <div className="calendar-card">
             <div className="calendar-head">
               <button className="nav-btn" onClick={prevMonth}>‹</button>
@@ -187,15 +183,12 @@ export default function CalendarPage() {
                     className={`cell ${inMonth ? "" : "dim"} ${isSel ? "selected" : ""}`}
                     onClick={() => setSelected(d)}
                   >
-                    {/* 날짜 왼쪽 정렬 */}
                     <span className="day day-left">{d.getDate()}</span>
 
-                    {/* 일정 개수(형광펜 라인) */}
                     {todoCount > 0 && (
                       <span className="todo-underline">{todoCount}</span>
                     )}
 
-                    {/* 일기 점(오른쪽 상단) */}
                     {dayDiary && <span className="diary-dot"></span>}
                   </div>
                 );
@@ -203,10 +196,8 @@ export default function CalendarPage() {
             </div>
           </div>
 
-          {/* --------------- 오른쪽 사이드 패널 --------------- */}
           <div className="side-panel">
 
-            {/* ---- To-Do ---- */}
             <div className="panel-card">
               <div className="panel-head">
                 <h3>To-Do List</h3>
@@ -265,7 +256,6 @@ export default function CalendarPage() {
               </ul>
             </div>
 
-            {/* ---- Diary ---- */}
             <div className="panel-card diary-section">
               <div className="panel-head">
                 <h3>한 줄 일기</h3>
@@ -308,7 +298,6 @@ export default function CalendarPage() {
           </div>
         </div>
 
-        {/* ---- To-Do Modal ---- */}
         {showTodoModal && (
           <div className="modal-backdrop" onClick={() => setShowTodoModal(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -347,7 +336,6 @@ export default function CalendarPage() {
           </div>
         )}
 
-        {/* ---- Diary Modal ---- */}
         {showDiaryModal && (
           <div className="modal-backdrop" onClick={() => setShowDiaryModal(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>

@@ -1,5 +1,3 @@
-// StudyPage.js
-
 import React, { useState, useEffect, useRef } from "react";
 import Header1 from "../../../components/common/Header1";
 import Header2 from "../../../components/common/Header2";
@@ -34,7 +32,6 @@ function StudyPage() {
     setRunning(false);
   };
 
-  /* ---------------------- 초기 로드 ---------------------- */
   useEffect(() => {
     const weekKey = getWeekKey();
     const todayKey = getTodayKey();
@@ -56,7 +53,6 @@ function StudyPage() {
     setSubjectTimes(JSON.parse(localStorage.getItem("subjectTimes") || "{}"));
   }, []);
 
-  /* ---------------------- 타이머 실행 ---------------------- */
   useEffect(() => {
     if (running) {
       timerRef.current = setInterval(() => setTime((t) => t + 10), 10);
@@ -66,14 +62,12 @@ function StudyPage() {
     return () => clearInterval(timerRef.current);
   }, [running]);
 
-  /* ---------------- 1초마다 공부 시간 기록 ---------------- */
   useEffect(() => {
     if (!running || time === 0) return;
 
     const todayKey = getTodayKey();
     const weekKey = getWeekKey();
 
-    // 1초마다 저장
     if (time % 1000 === 0) {
       setTodayStudy((prev) => {
         const updated = prev + 1;
@@ -100,7 +94,6 @@ function StudyPage() {
     }
   }, [time, running, currentSubject]);
 
-  /* ---------------- 과목 추가 ---------------- */
   const addSubject = () => {
     if (!subjectInput.trim()) return;
 
@@ -115,7 +108,6 @@ function StudyPage() {
     setSubjects(updatedSubjects);
     localStorage.setItem("subjects", JSON.stringify(updatedSubjects));
 
-    // 🔥 새 과목을 subjectTimes에도 0으로 초기화
     const updatedTimes = {
       ...subjectTimes,
       [name]: subjectTimes[name] || 0,
@@ -127,11 +119,9 @@ function StudyPage() {
     setSubjectInput("");
   };
 
-  /* ---------------- 과목 삭제 ---------------- */
   const deleteSubject = (name) => {
     const updatedSubjects = subjects.filter((s) => s !== name);
 
-    // subjectTimes에서도 삭제
     const updatedTimes = { ...subjectTimes };
     delete updatedTimes[name];
 
@@ -144,7 +134,6 @@ function StudyPage() {
     if (currentSubject === name) setCurrentSubject("");
   };
 
-  /* ---------------- 시간 형식 ---------------- */
   const formatTime = (seconds) => {
     const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
     const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
@@ -169,7 +158,6 @@ function StudyPage() {
       <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="study-container">
 
-          {/* ---------------- 카테고리 박스 ---------------- */}
           <div className="subject-box">
             <div className="subject-title">카테고리 관리</div>
 
@@ -204,7 +192,6 @@ function StudyPage() {
             </div>
           </div>
 
-          {/* ---------------- 스톱워치 ---------------- */}
           <div className="timer-box">
             <div
               className="timer-circle"
@@ -237,7 +224,6 @@ function StudyPage() {
             </div>
           </div>
 
-          {/* ---------------- 기록 ---------------- */}
           <div className="record-box">
             <div className="record-title">공부 기록</div>
 
@@ -266,7 +252,6 @@ function StudyPage() {
         </div>
       </div>
 
-      {/* ---------------- 모달 ---------------- */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>

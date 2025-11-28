@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
-import { sortedRanking } from "../../data/rankingData";  // 주간 순위 데이터
+import { sortedRanking } from "../../data/rankingData";  
 
 ChartJS.register(
   LineElement,
@@ -40,7 +40,6 @@ function ymd(date) {
 }
 
 
-// 🔥 날짜를 YYYY-MM-DD 형태로 반환
 function dateKey(date) {
   return date.toISOString().split("T")[0];
 }
@@ -53,54 +52,39 @@ function MainAfterLogin() {
   const [userChar, setUserChar] = useState(null);
 
   useEffect(() => {
-    // 오늘 할 일
     const todoKey = `todos:${ymd(new Date())}`;
     const storedTodos = JSON.parse(localStorage.getItem(todoKey) || "[]");
     setTodayTodos(storedTodos);
 
-    // 🔥 주간 순위 다시 적용
     if (sortedRanking?.length > 0) {
       setRanking(sortedRanking.slice(0, 5));
     }
 
-    // 과목별 누적 시간
     const subj = JSON.parse(localStorage.getItem("subjectTimes") || "{}");
     setSubjectTimes(subj);
 
-    // 날짜별 공부시간
     const daily = JSON.parse(localStorage.getItem("dailyStudy") || "{}");
     setDailyStudy(daily);
 
-    // 선택된 캐릭터
     const savedChar = JSON.parse(
       localStorage.getItem("selectedCharacter") || "null"
     );
     setUserChar(savedChar);
   }, []);
 
-  /* ===========================================================
-     1) 오늘 과목별 공부시간 — 상위 7개 정렬 + 0h 포함
-  =========================================================== */
-  const subjectEntries = Object.entries(subjectTimes); // [ [과목, 초], ...]
+  const subjectEntries = Object.entries(subjectTimes); 
 
-  // 초 → 시간 변환 후 정렬
   const sortedSubjects = subjectEntries
     .map(([subj, seconds]) => ({
       subj,
       hours: Number((seconds / 3600).toFixed(2)),
     }))
-    .sort((a, b) => b.hours - a.hours) // 내림차순
-    .slice(0, 7); // 최대 7개만
+    .sort((a, b) => b.hours - a.hours) 
+    .slice(0, 7);
 
   const subjectLabels = sortedSubjects.map((x) => x.subj);
   const subjectHours = sortedSubjects.map((x) => x.hours);
 
-
-  /* ===========================================================
-     2) 최근 7일 공부시간 — 오늘 맨 뒤 + 이전 6일 포함
-  =========================================================== */
-
-  // 오늘을 기준으로 7일 날짜 생성
   let last7 = [];
   const today = new Date();
 
@@ -110,7 +94,7 @@ function MainAfterLogin() {
     const key = dateKey(date);
 
     last7.push({
-      date: key.substring(5), // MM-DD
+      date: key.substring(5), 
       hours: Number(((dailyStudy[key] || 0) / 3600).toFixed(2)),
     });
   }
@@ -118,10 +102,6 @@ function MainAfterLogin() {
   const last7Labels = last7.map((x) => x.date);
   const last7Hours = last7.map((x) => x.hours);
 
-
-  /* ===========================================================
-     그래프 Y축 스텝 계산
-  =========================================================== */
   function getHourStep(maxHour) {
     if (maxHour <= 3) return 1;
     if (maxHour <= 10) return 2;
@@ -165,10 +145,6 @@ function MainAfterLogin() {
   };
 
 
-  /* ===========================================================
-     렌더링
-  =========================================================== */
-
   return (
     <>
       <Header1 isLoggedIn={true} />
@@ -177,7 +153,6 @@ function MainAfterLogin() {
       <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="afterlogin-container">
 
-          {/* 오늘의 할 일 카드 */}
           <div className="card-group">
             <p className="card-title">캘린더</p>
             <div className="uniform-card">
@@ -205,8 +180,6 @@ function MainAfterLogin() {
             </div>
           </div>
 
-
-          {/* 캐릭터 카드 */}
           <div className="card-group">
             <p className="card-title">캐릭터</p>
             <div className="uniform-card char-section">
@@ -230,8 +203,6 @@ function MainAfterLogin() {
             </div>
           </div>
 
-
-          {/* 주간 순위 */}
           <div className="card-group">
             <p className="card-title">사용자 레벨 순위</p>
             <div className="uniform-card">
@@ -241,7 +212,7 @@ function MainAfterLogin() {
               <ol>
                 {ranking.map((user, i) => (
                   <li key={i}>
-                    {i + 1}. {user.nickname} — Lv.{user.level}
+                   {user.nickname} — Lv.{user.level}
                   </li>
                 ))}
               </ol>
@@ -255,8 +226,6 @@ function MainAfterLogin() {
           </div>
         </div>
 
-
-        {/* 공부 통계 */}
         <div className="study-stat-big">
           <p className="card-title" style={{ marginLeft: "6px" }}>
             공부 통계
@@ -264,7 +233,6 @@ function MainAfterLogin() {
 
           <div className="stats-inner-row">
 
-            {/* 과목별 */}
             <div className="stats-small-card today-card">
               <h3 className="graph-title">오늘 과목별 공부시간</h3>
 
@@ -286,7 +254,6 @@ function MainAfterLogin() {
               </div>
             </div>
 
-            {/* 최근 7일 */}
             <div className="stats-small-card week-card">
               <h3 className="graph-title">최근 7일 공부시간</h3>
 
