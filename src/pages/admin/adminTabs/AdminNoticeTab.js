@@ -3,6 +3,7 @@ import "../../../styles/community/Tabs.css";
 import WriteTab from "./AdminWriteTab";
 
 function AdminNoticeTab() {
+  const [sort, setSort] = useState("new");
   const [search, setSearch] = useState("");
   const [isWriting, setIsWriting] = useState(false);
   const [editPost, setEditPost] = useState(null);
@@ -39,7 +40,11 @@ function AdminNoticeTab() {
   };
 
   const sortedList = [...noticeList]
-    .sort((a, b) => parseDate(b.time) - parseDate(a.time))
+    .sort((a, b) =>
+      sort === "new"
+        ? parseDate(b.time) - parseDate(a.time)
+        : parseDate(a.time) - parseDate(b.time)
+    )
     .map((item, index, arr) => ({ ...item, no: arr.length - index }));
 
   const handleSearch = () => {
@@ -107,6 +112,21 @@ function AdminNoticeTab() {
         />
         <button className="search-btn" onClick={handleSearch}>
           검색
+        </button>
+      </div>
+
+      <div className="sort-row">
+        <button
+          className={`sort-btn ${sort === "new" ? "active" : ""}`}
+          onClick={() => setSort("new")}
+        >
+          최신순
+        </button>
+        <button
+          className={`sort-btn ${sort === "old" ? "active" : ""}`}
+          onClick={() => setSort("old")}
+        >
+          오래된 순
         </button>
       </div>
 

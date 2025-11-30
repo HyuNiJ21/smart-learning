@@ -65,7 +65,7 @@ function AdminProfileTab({ onNavigatePassword }) {
         <div className="profile-info">
           <div className="profile-info-row horizontal">
             <label>Email</label>
-            <div className="info-display">{adminEmail}</div>
+            <div>{adminEmail}</div>
           </div>
         </div>
 

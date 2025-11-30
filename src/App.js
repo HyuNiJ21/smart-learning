@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 /* 메인화면 */
 import MainBeforeLogin from "./pages/home/MainBeforeLogin";
@@ -41,7 +41,30 @@ function RequireAdmin({ children }) {
 }
 
 function App() {
-  //const isAdmin = localStorage.getItem("role") === "admin";
+  /* 사용자/관리자 테마 분리 적용 */
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role === "admin") {
+      document.documentElement.classList.add("admin-mode");
+      document.documentElement.classList.remove("user-mode");
+
+      const adminBg = localStorage.getItem("adminThemeBg") || "#FFF4A3";
+      const adminAccent = localStorage.getItem("adminThemeAccent") || "#FFD400";
+
+      document.documentElement.style.setProperty("--admin-theme-bg", adminBg);
+      document.documentElement.style.setProperty("--admin-theme-accent", adminAccent);
+    } else {
+      document.documentElement.classList.add("user-mode");
+      document.documentElement.classList.remove("admin-mode");
+
+      const userBg = localStorage.getItem("userThemeBg") || "#FFF4A3";
+      const userAccent = localStorage.getItem("userThemeAccent") || "#FFD400";
+
+      document.documentElement.style.setProperty("--user-theme-bg", userBg);
+      document.documentElement.style.setProperty("--user-theme-accent", userAccent);
+    }
+  }, []);
 
   return (
     <WordSetProvider>

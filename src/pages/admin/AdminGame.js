@@ -284,11 +284,11 @@ export default function AdminGame() {
               onChange={(e) => setNewSetName(e.target.value)}
             />
 
-            <button className="yellow-btn" onClick={createSet}>
+            <button className="yellow-btn white-accent-btn" onClick={createSet}>
               세트 추가
             </button>
 
-            <label className="yellow-btn excel-label">
+            <label className="yellow-btn excel-label white-accent-btn">
               엑셀 업로드
               <input
                 type="file"

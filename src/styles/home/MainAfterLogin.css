@@ -1,6 +1,6 @@
 /* 기존 카드 3개 영역 */
 .afterlogin-container {
-  background-color: #ffeeB5;
+  background-color: var(--theme-bg) !important;
   padding: 20px 40px;
   display: flex;
   justify-content: center;
@@ -87,7 +87,7 @@
 /* 바로가기 링크  */
 .more-link {
   font-size: 13px;
-  color: #FFD400;
+  color: var(--theme-accent);
   text-decoration: none;
   font-weight: bold;
   text-align: right;
@@ -128,8 +128,8 @@
 
 /* 오늘 공부 카드 */
 .today-card {
-  background: #FFF4C2;
-  border: 2px solid #FFD400;
+  background: color-mix(in srgb, var(--theme-accent) 30%, white);
+  border: 2px solid var(--theme-accent);
 }
 
 /* 이번 주 공부 카드 */
@@ -155,14 +155,14 @@
   padding: 30px 30px 20px;
 }
 
-/* 내부 통계 2개를 가로 배치 */
+/* 로 배치 */
 .stats-inner-row {
   display: flex;
   gap: 30px;
   margin-top: 15px;
 }
 
-/* 내부의 작은 통계 카드 */
+/* 통계 카드 */
 .stats-small-card {
   background: #fff;
   border-radius: 12px;
@@ -176,19 +176,16 @@
   text-align: center;
 }
 
-/* 오늘 카드(노랑톤) */
-.today-card {
-  background: #FFF4C2;
-  border: 2px solid #FFD400;
+.stats-small-card.today {
+  background: color-mix(in srgb, var(--theme-accent) 30%, white);
+  border: 2px solid var(--theme-accent);
 }
 
-/* 이번 주 카드(파랑톤) */
-.week-card {
+.stats-small-card.week {
   background: #EAF4FF;
   border: 2px solid #4DA3FF;
 }
 
-/* 시간 강조 텍스트 */
 .stats-time {
   margin-top: 10px;
   font-size: 26px;

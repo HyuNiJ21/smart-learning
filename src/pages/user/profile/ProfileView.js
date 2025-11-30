@@ -31,6 +31,13 @@ function ProfileView() {
     const loginStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loginStatus);
   }, []);
+  
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("themeColor");
+    if (savedTheme) {
+      document.documentElement.style.setProperty("--theme-color", savedTheme);
+    }
+  }, []);
 
   // 공통 탭 이동 함수
   const goToTab = (tabName) => {

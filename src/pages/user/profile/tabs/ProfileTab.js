@@ -79,7 +79,7 @@ function ProfileTab({ onNavigatePassword }) {
         <div className="profile-info">
           <div className="profile-info-row horizontal">
             <label>Email</label>
-            <div className="info-display">testuser</div>
+            <div>testuser</div>
           </div>
         </div>
 
@@ -88,7 +88,6 @@ function ProfileTab({ onNavigatePassword }) {
           <button className="yellow-btn" onClick={onNavigatePassword}>
             비밀번호 재설정
           </button>
-          <button className="gray-btn">취소</button>
         </div>
       </div>
     </div>

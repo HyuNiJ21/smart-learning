@@ -14,6 +14,25 @@ function AdminHeader1({
   const dropdownRef = useRef(null);
   const [open, setOpen] = useState(false);
 
+  /* 관리자 테마 적용 */
+  useEffect(() => {
+    // 관리자 모드 설정
+    document.documentElement.classList.add("admin-mode");
+    document.documentElement.classList.remove("user-mode");
+
+    // 저장된 관리자 테마 불러오기
+    const adminBg = localStorage.getItem("adminThemeBg");
+    const adminAccent = localStorage.getItem("adminThemeAccent");
+
+    if (adminBg) {
+      document.documentElement.style.setProperty("--admin-theme-bg", adminBg);
+    }
+
+    if (adminAccent) {
+      document.documentElement.style.setProperty("--admin-theme-accent", adminAccent);
+    }
+  }, []);
+
   const handleLogoClick = () => {
     navigate("/admin/main");
   };
@@ -29,7 +48,8 @@ function AdminHeader1({
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
@@ -110,7 +130,6 @@ function AdminHeader1({
           </>
         ) : (
           <>
-            {/* (거의 안 쓰이지만 비로그인 대비) */}
             <button
               className="menu-btn"
               onClick={() => navigate("/user/auth/Login")}

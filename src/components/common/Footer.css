@@ -1,7 +1,22 @@
+/* 공통 스타일 */
 .footer {
-  background: #FFEEB5;
   padding: 10px 20px;
   font-size: 14px;
-  color: #9CA2AE;
   text-align: left;
+  color: #333;
+}
+
+/* 로그인 전 */
+.footer-default {
+  background-color: #FFEEB5 !important;
+}
+
+/* 사용자 로그인 후 */
+.user-mode .footer-user {
+  background-color: var(--user-theme-bg) !important;
+}
+
+/* 관리자 로그인 후 */
+.admin-mode .footer-admin {
+  background-color: var(--admin-theme-bg) !important;
 }

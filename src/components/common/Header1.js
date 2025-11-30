@@ -19,6 +19,25 @@ function Header1({
 
   const role = localStorage.getItem("role");
 
+  /* 사용자 테마 적용 */
+  useEffect(() => {
+    if (role === "admin") return;
+
+    document.documentElement.classList.add("user-mode");
+    document.documentElement.classList.remove("admin-mode");
+
+    const userBg = localStorage.getItem("userThemeBg");
+    const userAccent = localStorage.getItem("userThemeAccent");
+
+    if (userBg) {
+      document.documentElement.style.setProperty("--user-theme-bg", userBg);
+    }
+
+    if (userAccent) {
+      document.documentElement.style.setProperty("--user-theme-accent", userAccent);
+    }
+  }, [role]);
+
   const handleLogoClick = () => {
     if (loggedIn) navigate("/home/after");
     else navigate("/home/before");
@@ -42,7 +61,7 @@ function Header1({
     navigate("/home/before");
   };
 
-  // 관리자일 경우 사용자 헤더 숨김
+  // 관리자일 경우 사용자 헤더는 숨김
   if (role === "admin") return null;
 
   return (

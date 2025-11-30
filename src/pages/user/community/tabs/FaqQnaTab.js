@@ -3,13 +3,60 @@ import "../../../../styles/community/Tabs.css";
 import { Search } from "lucide-react";
 import WriteTab from "./WriteTab";
 
+// FAQ 초기 데이터
+const initialFaqList = [
+  {
+    id: 1,
+    title: "비밀번호 변경 방법은?",
+    content: "프로필 설정에서 변경 가능합니다.",
+    time: "2025년 11월 2일 09:40",
+  },
+  {
+    id: 2,
+    title: "회원탈퇴는 어떻게 하나요?",
+    content: "마이페이지에서 탈퇴 요청이 가능합니다.",
+    time: "2025년 11월 1일 11:15",
+  },
+];
+
+// 1:1 문의 초기 데이터 (대화 여러 번 가능)
+const initialQnaList = [
+  {
+    id: 1,
+    title: "첫번째 문의",
+    time: "2025년 11월 3일 13:10",
+    messages: [
+      {
+        id: 1,
+        sender: "user",
+        text: "테스트입니다.",
+        time: "2025년 11월 3일 13:10",
+      },
+      {
+        id: 2,
+        sender: "admin",
+        text: "안녕하세요! 문의 주셔서 감사합니다.",
+        time: "2025년 11월 3일 14:00",
+      },
+    ],
+  },
+];
+
 function FaqQnaTab() {
-  const [activeSubTab, setActiveSubTab] = useState("faq");
+  const [activeSubTab, setActiveSubTab] = useState("faq"); // faq | qna
   const [search, setSearch] = useState("");
   const [isWriting, setIsWriting] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [editPost, setEditPost] = useState(null);
+  const [sort, setSort] = useState("new"); // new | old
 
+  // 사용자 추가 문의 입력값
+  const [replyText, setReplyText] = useState("");
+
+  // 실제 데이터(원본)
+  const [faqList] = useState(initialFaqList);
+  const [qnaList, setQnaList] = useState(initialQnaList);
+
+  // 날짜 파싱
   const parseDate = (t) => {
     if (!t) return 0;
     const [year, month, day, hour, minute] = t
@@ -22,138 +69,259 @@ function FaqQnaTab() {
     return new Date(year, month - 1, day, hour, minute).getTime();
   };
 
-  // FAQ 초기 데이터
-  const [faqList, setFaqList] = useState([
-    { id: 1, title: "비밀번호 변경 방법은?", content: "프로필 설정에서 변경 가능합니다.", time: "2025년 11월 2일 09:40" },
-    { id: 2, title: "회원탈퇴는 어떻게 하나요?", content: "마이페이지에서 탈퇴 요청이 가능합니다.", time: "2025년 11월 1일 11:15" },
-  ]);
-  const [originalFaqList, setOriginalFaqList] = useState([]);
+  const hasAdminReply = (item) =>
+    item.messages && item.messages.some((m) => m.sender === "admin");
 
-  // QnA 초기 데이터
-  const [qnaList, setQnaList] = useState([
-    { id: 1, title: "첫번째 문의", content: "테스트", time: "2025년 11월 3일 13:10" },
-  ]);
-  const [originalQnaList, setOriginalQnaList] = useState([]);
-
-  // 원본 데이터 저장
-  useEffect(() => {
-    if (originalFaqList.length === 0) setOriginalFaqList(faqList);
-    if (originalQnaList.length === 0) setOriginalQnaList(qnaList);
-  }, [faqList, qnaList, originalFaqList.length, originalQnaList.length]);
-
-  // 검색 버튼 클릭 시 필터링
   const handleSearchClick = () => {
-    if (activeSubTab === "faq") {
-      if (!search.trim()) {
-        setFaqList(originalFaqList); // 전체 복원
-        return;
-      }
-      const filtered = originalFaqList.filter(
-        (item) =>
-          item.title.toLowerCase().includes(search.toLowerCase()) ||
-          (item.content && item.content.toLowerCase().includes(search.toLowerCase()))
-      );
-      setFaqList(filtered);
-    } else {
-      if (!search.trim()) {
-        setQnaList(originalQnaList); // 전체 복원
-        return;
-      }
-      const filtered = originalQnaList.filter(
-        (item) =>
-          item.title.toLowerCase().includes(search.toLowerCase()) ||
-          (item.content && item.content.toLowerCase().includes(search.toLowerCase()))
-      );
-      setQnaList(filtered);
-    }
+    // 필터는 상태(search) 기반으로 항상 적용되기 때문에
+    // 이 함수는 "버튼을 눌러 검색한다"는 UX용으로만 존재
+    // 굳이 로직을 넣을 필요는 없음
   };
 
-  // 검색어 공백 시 자동 복원
-  useEffect(() => {
-    if (!search.trim()) {
-      setFaqList(originalFaqList);
-      setQnaList(originalQnaList);
-    }
-  }, [search, originalFaqList, originalQnaList]);
-
+  // 문의 추가
   const handleAddQna = (newPost) => {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}년 ${String(now.getMonth() + 1).padStart(2, "0")}월 ${String(
-      now.getDate()
-    ).padStart(2, "0")}일 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    const timeStr = `${now.getFullYear()}년 ${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}월 ${String(now.getDate()).padStart(2, "0")}일 ${String(
+      now.getHours()
+    ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-    const newItem = { id: Date.now(), title: newPost.title, content: newPost.content, time: dateStr };
+    const firstMessage = {
+      id: 1,
+      sender: "user",
+      text: newPost.content,
+      time: timeStr,
+    };
+
+    const newItem = {
+      id: Date.now(),
+      title: newPost.title,
+      time: timeStr,
+      messages: [firstMessage],
+    };
+
     const updated = [newItem, ...qnaList];
     setQnaList(updated);
-    setOriginalQnaList(updated);
     setIsWriting(false);
   };
 
-  const handleEditSubmit = (updatedPost) => {
-    const updatedList = qnaList.map((post) => (post.id === updatedPost.id ? updatedPost : post));
-    setQnaList(updatedList);
-    setOriginalQnaList(updatedList);
-    setEditPost(null);
+  // 사용자 추가 문의 등록
+  const handleUserReplySubmit = () => {
+    if (!selectedPost) return;
+    if (!replyText.trim()) {
+      alert("내용을 입력하세요.");
+      return;
+    }
+
+    const now = new Date();
+    const replyTime = `${now.getFullYear()}년 ${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}월 ${String(now.getDate()).padStart(2, "0")}일 ${String(
+      now.getHours()
+    ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+    const updatedQna = qnaList.map((item) => {
+      if (item.id !== selectedPost.id) return item;
+
+      const nextId =
+        item.messages.length > 0
+          ? item.messages[item.messages.length - 1].id + 1
+          : 1;
+
+      const newMsg = {
+        id: nextId,
+        sender: "user",
+        text: replyText,
+        time: replyTime,
+      };
+
+      return {
+        ...item,
+        messages: [...item.messages, newMsg],
+      };
+    });
+
+    setQnaList(updatedQna);
+
+    // 상세 보기 중인 글도 최신 상태로 반영
+    const updatedSelected = updatedQna.find(
+      (item) => item.id === selectedPost.id
+    );
+    setSelectedPost(updatedSelected);
+    setReplyText("");
+
+    alert("추가 문의가 등록되었습니다.");
+  };
+
+  // 선택된 글이 바뀌면 입력창 초기화
+  useEffect(() => {
+    if (selectedPost) {
+      setReplyText("");
+    }
+  }, [selectedPost]);
+
+  // 글 삭제
+  const handleDelete = (postId) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+    const updated = qnaList.filter((item) => item.id !== postId);
+    setQnaList(updated);
     setSelectedPost(null);
   };
 
-  const handleDelete = (postId) => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      const updated = qnaList.filter((post) => post.id !== postId);
-      setQnaList(updated);
-      setOriginalQnaList(updated);
-      setSelectedPost(null);
-      alert("삭제되었습니다.");
-    }
+  // 글 상세 보기
+  const handleViewPost = (item) => {
+    setSelectedPost(item);
   };
 
-  const handleViewPost = (item) => setSelectedPost(item);
   const handleBackToList = () => {
     setSelectedPost(null);
-    setEditPost(null);
     setIsWriting(false);
   };
 
-  // 글쓰기/수정/보기 모드
-  if (isWriting) return <WriteTab onBack={handleBackToList} onSubmit={handleAddQna} />;
-  if (editPost) return <WriteTab onBack={handleBackToList} onSubmit={handleEditSubmit} editPost={editPost} />;
+  // 검색 + 정렬 적용 (FAQ)
+  const keyword = search.trim().toLowerCase();
+
+  const filteredFaq = !keyword
+    ? faqList
+    : faqList.filter(
+        (item) =>
+          item.title.toLowerCase().includes(keyword) ||
+          (item.content &&
+            item.content.toLowerCase().includes(keyword))
+      );
+
+  const sortedFaq = [...filteredFaq]
+    .sort((a, b) =>
+      sort === "new"
+        ? parseDate(b.time) - parseDate(a.time)
+        : parseDate(a.time) - parseDate(b.time)
+    )
+    .map((item, idx, arr) => ({ ...item, no: arr.length - idx }));
+
+  // 검색 + 정렬 적용 (QnA)
+  const filteredQna = !keyword
+    ? qnaList
+    : qnaList.filter((item) => {
+        const inTitle = item.title.toLowerCase().includes(keyword);
+        const inMessages =
+          item.messages &&
+          item.messages.some((m) =>
+            m.text.toLowerCase().includes(keyword)
+          );
+        return inTitle || inMessages;
+      });
+
+  const sortedQna = [...filteredQna]
+    .sort((a, b) =>
+      sort === "new"
+        ? parseDate(b.time) - parseDate(a.time)
+        : parseDate(a.time) - parseDate(b.time)
+    )
+    .map((item, idx, arr) => ({ ...item, no: arr.length - idx }));
+
+  const listToShow = activeSubTab === "faq" ? sortedFaq : sortedQna;
+
+  /* 상세 화면 (1:1 문의 상세) */
   if (selectedPost) {
     return (
       <div className="tab-inner faq-tab">
         <div className="write-form">
           <h2>{selectedPost.title}</h2>
-          <hr />
-          <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{selectedPost.content}</p>
-          <p style={{ color: "#777", marginTop: "10px" }}>작성시간: {selectedPost.time}</p>
+          <p style={{ color: "#777", marginTop: "4px" }}>
+            최초 작성시간: {selectedPost.time}
+          </p>
+          <hr style={{ margin: "16px 0" }} />
+
+          {/* 대화 내역  */}
+          <h3 style={{ marginBottom: "10px" }}>대화 내역</h3>
+          {selectedPost.messages.map((msg) => (
+            <div className="answer-box" key={msg.id}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>
+                  {msg.sender === "admin" ? "관리자" : "사용자"}
+                </span>
+                <span style={{ fontSize: "12px", color: "#777" }}>
+                  {msg.time}
+                </span>
+              </div>
+              <p
+                style={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: "1.5",
+                  margin: 0,
+                }}
+              >
+                {msg.text}
+              </p>
+            </div>
+          ))}
+
+          {/* 사용자 추가 문의 입력 영역 */}
+          <h3 style={{ marginTop: "24px", marginBottom: "8px" }}>
+            추가 문의
+          </h3>
+          <textarea
+            className="answer-textarea"
+            placeholder="관리자에게 추가 문의를 남길 수 있어요."
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+          />
+
+          <div className="btn-right">
+            <button className="common-btn" onClick={handleUserReplySubmit}>
+              추가 문의 보내기
+            </button>
+          </div>
         </div>
 
-        <div className="btn-right" style={{ gap: "10px" }}>
-          <button className="common-btn" onClick={() => handleDelete(selectedPost.id)}>삭제</button>
-          <button className="cancel-btn" onClick={handleBackToList}>목록으로</button>
+        <div className="btn-right">
+          <button
+            className="common-btn"
+            onClick={() => handleDelete(selectedPost.id)}
+          >
+            삭제
+          </button>
+          <button className="cancel-btn" onClick={handleBackToList}>
+            목록으로
+          </button>
         </div>
       </div>
     );
   }
 
-  // 최신순 정렬
-  const sortedFaq = [...faqList]
-    .sort((a, b) => parseDate(b.time) - parseDate(a.time))
-    .map((item, index, arr) => ({ ...item, no: arr.length - index }));
+  /* 글쓰기 모드 */
+  if (isWriting) {
+    return <WriteTab onBack={handleBackToList} onSubmit={handleAddQna} />;
+  }
 
-  const sortedQna = [...qnaList]
-    .sort((a, b) => parseDate(b.time) - parseDate(a.time))
-    .map((item, index, arr) => ({ ...item, no: arr.length - index }));
-
-  const listToShow = activeSubTab === "faq" ? sortedFaq : sortedQna;
-
+  /* 목록 화면 */
   return (
     <div className="tab-inner faq-tab">
       <h2>{activeSubTab === "faq" ? "자주 묻는 질문" : "1:1 문의"}</h2>
 
-      {/* 전환 */}
+      {/* FAQ / QnA 전환 */}
       <div className="faq-tabs">
-        <button className={activeSubTab === "faq" ? "active" : ""} onClick={() => setActiveSubTab("faq")}>FAQ</button>
-        <button className={activeSubTab === "qna" ? "active" : ""} onClick={() => setActiveSubTab("qna")}>Q&A</button>
+        <button
+          className={activeSubTab === "faq" ? "active" : ""}
+          onClick={() => setActiveSubTab("faq")}
+        >
+          FAQ
+        </button>
+        <button
+          className={activeSubTab === "qna" ? "active" : ""}
+          onClick={() => setActiveSubTab("qna")}
+        >
+          Q&A
+        </button>
       </div>
 
       {/* 검색 */}
@@ -169,25 +337,57 @@ function FaqQnaTab() {
         </button>
       </div>
 
-      {/* 테이블 */}
+      {/* 정렬 버튼 */}
+      <div className="sort-row">
+        <button
+          className={`sort-btn ${sort === "new" ? "active" : ""}`}
+          onClick={() => setSort("new")}
+        >
+          최신순
+        </button>
+        <button
+          className={`sort-btn ${sort === "old" ? "active" : ""}`}
+          onClick={() => setSort("old")}
+        >
+          오래된 순
+        </button>
+      </div>
+
+      {/* 목록 테이블 */}
       <table className="table">
         <thead>
           <tr>
             <th>No</th>
             <th>제목</th>
             <th>작성시간</th>
+            {activeSubTab === "qna" && <th>답변상태</th>}
           </tr>
         </thead>
         <tbody>
           {listToShow.map((item) => (
             <tr
               key={item.id}
-              style={{ cursor: activeSubTab === "qna" ? "pointer" : "default" }}
-              onClick={() => activeSubTab === "qna" && handleViewPost(item)}
+              style={{
+                cursor: activeSubTab === "qna" ? "pointer" : "default",
+              }}
+              onClick={() =>
+                activeSubTab === "qna" ? handleViewPost(item) : null
+              }
             >
               <td>{item.no}</td>
               <td>{item.title}</td>
               <td>{item.time}</td>
+              {activeSubTab === "qna" && (
+                <td
+                  className={
+                    hasAdminReply(item)
+                      ? "status-complete"
+                      : "status-pending"
+                  }
+                >
+                  {hasAdminReply(item) ? "답변완료" : "미답변"}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -195,7 +395,9 @@ function FaqQnaTab() {
 
       {activeSubTab === "qna" && (
         <div className="btn-right">
-          <button className="common-btn" onClick={() => setIsWriting(true)}>글쓰기</button>
+          <button className="common-btn" onClick={() => setIsWriting(true)}>
+            글쓰기
+          </button>
         </div>
       )}
     </div>

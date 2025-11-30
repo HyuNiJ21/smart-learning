@@ -52,7 +52,7 @@ function Login() {
       <Header1 isLoggedIn={false} />
       <Header2 isLoggedIn={false} />
 
-      <div className="page-content" style={{ paddingTop: "93px" }}>
+      <div className="auth-page" style={{ paddingTop: "93px" }}>
         <div className="login-container">
           <div className="login-box">
             <h2>

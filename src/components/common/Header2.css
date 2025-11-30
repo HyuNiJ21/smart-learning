@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-evenly;
   padding: 12px 0;
-  background-color: #fff;
+  background-color: #fff !important;
   border-bottom: 1px solid #eee;
   position: fixed;
   top: 59px;
@@ -23,7 +23,7 @@
 
 /* 현재 활성 메뉴 */
 .header2 a.active {
-  color: #FFD400;
+  color: var(--theme-accent);
 }
 
 /* 비활성 상태 */
