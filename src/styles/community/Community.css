@@ -63,3 +63,21 @@
 .small-btn:hover {
   background-color: color-mix(in srgb, var(--theme-accent) 85%, #000000 15%);
 }
+
+.community-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+/* 사이드바 고정 */
+.community-sidebar {
+  flex: 0 0 220px;
+}
+
+/* 우측 콘텐츠는 남은 공간 사용 */
+.community-content {
+  flex: 1;
+  min-width: 0;
+}

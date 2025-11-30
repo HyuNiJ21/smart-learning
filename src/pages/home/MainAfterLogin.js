@@ -4,7 +4,28 @@ import "../../styles/home/MainAfterLogin.css";
 import Header1 from "../../components/common/Header1";
 import Header2 from "../../components/common/Header2";
 import Footer from "../../components/common/Footer";
-import { sortedRanking } from "../../data/rankingData";
+
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+import { Line } from "react-chartjs-2";
+import { sortedRanking } from "../../data/rankingData";  
+
+ChartJS.register(
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 function pad(n) {
   return n.toString().padStart(2, "0");
@@ -18,35 +39,111 @@ function ymd(date) {
   return `${y}년 ${m}월 ${d}일`;
 }
 
+
+function dateKey(date) {
+  return date.toISOString().split("T")[0];
+}
+
 function MainAfterLogin() {
   const [todayTodos, setTodayTodos] = useState([]);
   const [ranking, setRanking] = useState([]);
-
-  const [todayStudy, setTodayStudy] = useState(0);
-  const [weekStudy, setWeekStudy] = useState(0);
-
-  const formatTime = (seconds) => {
-    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
-    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
-    const s = String(seconds % 60).padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  };
+  const [subjectTimes, setSubjectTimes] = useState({});
+  const [dailyStudy, setDailyStudy] = useState({});
+  const [userChar, setUserChar] = useState(null);
 
   useEffect(() => {
-    const today = new Date();
-    const todayKey = `todos:${ymd(today)}`;
+    const todoKey = `todos:${ymd(new Date())}`;
+    const storedTodos = JSON.parse(localStorage.getItem(todoKey) || "[]");
+    setTodayTodos(storedTodos);
 
-    const stored = JSON.parse(localStorage.getItem(todayKey) || "[]");
-    setTodayTodos(stored);
+    if (sortedRanking?.length > 0) {
+      setRanking(sortedRanking.slice(0, 5));
+    }
 
-    setRanking(sortedRanking.slice(0, 5));
+    const subj = JSON.parse(localStorage.getItem("subjectTimes") || "{}");
+    setSubjectTimes(subj);
 
-    const todayData = JSON.parse(localStorage.getItem("todayStudy") || "{}");
-    const weekData = JSON.parse(localStorage.getItem("weekStudy") || "{}");
+    const daily = JSON.parse(localStorage.getItem("dailyStudy") || "{}");
+    setDailyStudy(daily);
 
-    setTodayStudy(todayData.time || 0);
-    setWeekStudy(weekData.time || 0);
+    const savedChar = JSON.parse(
+      localStorage.getItem("selectedCharacter") || "null"
+    );
+    setUserChar(savedChar);
   }, []);
+
+  const subjectEntries = Object.entries(subjectTimes); 
+
+  const sortedSubjects = subjectEntries
+    .map(([subj, seconds]) => ({
+      subj,
+      hours: Number((seconds / 3600).toFixed(2)),
+    }))
+    .sort((a, b) => b.hours - a.hours) 
+    .slice(0, 7);
+
+  const subjectLabels = sortedSubjects.map((x) => x.subj);
+  const subjectHours = sortedSubjects.map((x) => x.hours);
+
+  let last7 = [];
+  const today = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+    const key = dateKey(date);
+
+    last7.push({
+      date: key.substring(5), 
+      hours: Number(((dailyStudy[key] || 0) / 3600).toFixed(2)),
+    });
+  }
+
+  const last7Labels = last7.map((x) => x.date);
+  const last7Hours = last7.map((x) => x.hours);
+
+  function getHourStep(maxHour) {
+    if (maxHour <= 3) return 1;
+    if (maxHour <= 10) return 2;
+    if (maxHour <= 20) return 5;
+    return 10;
+  }
+
+  const subjectStep = getHourStep(Math.max(...subjectHours, 0));
+  const dailyStep = getHourStep(Math.max(...last7Hours, 0));
+
+  const baseLineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    elements: {
+      line: { tension: 0.3, borderWidth: 3 },
+      point: { radius: 5, hoverRadius: 7 },
+    },
+    plugins: { legend: { display: false } },
+  };
+
+  const subjectLineOptions = {
+    ...baseLineOptions,
+    scales: {
+      y: {
+        beginAtZero: true,
+        suggestedMax: Math.max(...subjectHours, 0) + subjectStep,
+        ticks: { stepSize: subjectStep, callback: (v) => `${v}h` },
+      },
+    },
+  };
+
+  const dailyLineOptions = {
+    ...baseLineOptions,
+    scales: {
+      y: {
+        beginAtZero: true,
+        suggestedMax: Math.max(...last7Hours, 0) + dailyStep,
+        ticks: { stepSize: dailyStep, callback: (v) => `${v}h` },
+      },
+    },
+  };
+
 
   return (
     <>
@@ -54,79 +151,133 @@ function MainAfterLogin() {
       <Header2 isLoggedIn={true} />
 
       <div className="page-content" style={{ paddingTop: "93px" }}>
-        
-        {/* 기존 카드 + 공부 통계 */}
         <div className="afterlogin-container">
 
-          {/* 캘린더 */}
           <div className="card-group">
             <p className="card-title">캘린더</p>
-            <div className="card">
-              <h3>오늘의 할 일</h3>
+            <div className="uniform-card">
+              <h3>
+                오늘의 할 일{" "}
+                <span className="todo-count">({todayTodos.length})</span>
+              </h3>
               <p className="date">{ymd(new Date())}</p>
-              {todayTodos.length === 0 ? (
-                <ul>
+
+              <ul className="todo-ul">
+                {todayTodos.length === 0 ? (
                   <li>오늘의 일정이 없습니다.</li>
-                </ul>
-              ) : (
-                <ul>
-                  {todayTodos.slice(0, 3).map((t, i) => (
+                ) : (
+                  todayTodos.slice(0, 3).map((t, i) => (
                     <li key={i}>{t.done ? <s>{t.title}</s> : t.title}</li>
-                  ))}
-                </ul>
-              )}
-              <Link to="/user/calendar" className="more-link">바로가기 →</Link>
+                  ))
+                )}
+              </ul>
+
+              <div className="card-bottom">
+                <Link to="/user/calendar" className="more-link">
+                  바로가기 →
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* 캐릭터 */}
           <div className="card-group">
             <p className="card-title">캐릭터</p>
-            <div className="card">
-              <div className="character-box">캐릭터 이미지</div>
-              <p className="character-name">캐릭터 이름</p>
+            <div className="uniform-card char-section">
+              <div className="character-image-box">
+                {userChar?.image ? (
+                  <img src={userChar.image} alt="캐릭터 이미지" className="character-img-home" />
+                ) : (
+                  <p className="no-img-text">캐릭터 없음</p>
+                )}
+              </div>
+              <p className="char-name">{userChar?.name || "미선택"}</p>
+              <p className="char-level">
+                {userChar?.level ? `Lv.${userChar.level}` : ""}
+              </p>
+
+              <div className="card-bottom">
+                <Link to="/user/character" className="more-link">
+                  바로가기 →
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* 랭킹 */}
           <div className="card-group">
             <p className="card-title">사용자 레벨 순위</p>
-            <div className="card">
+            <div className="uniform-card">
               <h3>주간 순위</h3>
               <p className="date">{ymd(new Date())}</p>
-              {ranking.length === 0 ? (
-                <ul><li>순위 데이터가 없습니다.</li></ul>
-              ) : (
-                <ol>
-                  {ranking.map((user, index) => (
-                    <li key={user.nickname + index}>
-                      {index + 1}. {user.nickname} — Lv.{user.level}
-                    </li>
-                  ))}
-                </ol>
-              )}
-              <Link to="/user/ranking" className="more-link">바로가기 →</Link>
-            </div>
-          </div>
 
-          {/* 공부 통계 */}
-          <div className="card study-stat-big">
-            <p className="card-title">공부 통계</p>
+              <ol>
+                {ranking.map((user, i) => (
+                  <li key={i}>
+                   {user.nickname} — Lv.{user.level}
+                  </li>
+                ))}
+              </ol>
 
-            <div className="stats-inner-row">
-              <div className="stats-small-card today-card">
-                <h3>오늘의 공부시간</h3>
-                <p className="stats-time">{formatTime(todayStudy)}</p>
-              </div>
-
-              <div className="stats-small-card week-card">
-                <h3>이번 주 공부시간</h3>
-                <p className="stats-time">{formatTime(weekStudy)}</p>
+              <div className="card-bottom">
+                <Link to="/user/ranking" className="more-link">
+                  바로가기 →
+                </Link>
               </div>
             </div>
           </div>
-
         </div>
+
+        <div className="study-stat-big">
+          <p className="card-title" style={{ marginLeft: "6px" }}>
+            공부 통계
+          </p>
+
+          <div className="stats-inner-row">
+
+            <div className="stats-small-card today-card">
+              <h3 className="graph-title">오늘 과목별 공부시간</h3>
+
+              <div className="chart-container">
+                <Line
+                  data={{
+                    labels: subjectLabels,
+                    datasets: [
+                      {
+                        data: subjectHours,
+                        borderColor: "#FFD400",
+                        backgroundColor: "rgba(255,212,0,0.3)",
+                        pointBackgroundColor: "#FFD400",
+                      },
+                    ],
+                  }}
+                  options={subjectLineOptions}
+                />
+              </div>
+            </div>
+
+            <div className="stats-small-card week-card">
+              <h3 className="graph-title">최근 7일 공부시간</h3>
+
+              <div className="chart-container">
+                <Line
+                  data={{
+                    labels: last7Labels,
+                    datasets: [
+                      {
+                        data: last7Hours,
+                        borderColor: "#4DA3FF",
+                        backgroundColor: "rgba(77,163,255,0.3)",
+                        pointBackgroundColor: "#4DA3FF",
+                      },
+                    ],
+                  }}
+                  options={dailyLineOptions}
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         <Footer />
       </div>
     </>

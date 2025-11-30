@@ -26,14 +26,12 @@ function StudyPage() {
     return monday.toISOString().split("T")[0];
   };
 
-  // 카테고리 선택 시 타이머 리셋
   const handleSubjectChange = (name) => {
     setCurrentSubject(name);
     setTime(0);
     setRunning(false);
   };
 
-  // 초기 로드
   useEffect(() => {
     const weekKey = getWeekKey();
     const todayKey = getTodayKey();
@@ -55,7 +53,6 @@ function StudyPage() {
     setSubjectTimes(JSON.parse(localStorage.getItem("subjectTimes") || "{}"));
   }, []);
 
-  // 타이머 작동
   useEffect(() => {
     if (running) {
       timerRef.current = setInterval(() => setTime((t) => t + 10), 10);
@@ -65,7 +62,6 @@ function StudyPage() {
     return () => clearInterval(timerRef.current);
   }, [running]);
 
-  // 1초마다 증가
   useEffect(() => {
     if (!running || time === 0) return;
 
@@ -98,23 +94,34 @@ function StudyPage() {
     }
   }, [time, running, currentSubject]);
 
-  // 카테고리 추가
   const addSubject = () => {
     if (!subjectInput.trim()) return;
-    if (subjects.includes(subjectInput.trim())) {
+
+    const name = subjectInput.trim();
+
+    if (subjects.includes(name)) {
       alert("이미 존재하는 카테고리입니다.");
       return;
     }
 
-    const updated = [...subjects, subjectInput.trim()];
-    setSubjects(updated);
-    localStorage.setItem("subjects", JSON.stringify(updated));
+    const updatedSubjects = [...subjects, name];
+    setSubjects(updatedSubjects);
+    localStorage.setItem("subjects", JSON.stringify(updatedSubjects));
+
+    const updatedTimes = {
+      ...subjectTimes,
+      [name]: subjectTimes[name] || 0,
+    };
+
+    setSubjectTimes(updatedTimes);
+    localStorage.setItem("subjectTimes", JSON.stringify(updatedTimes));
+
     setSubjectInput("");
   };
 
-  // 카테고리 삭제
   const deleteSubject = (name) => {
     const updatedSubjects = subjects.filter((s) => s !== name);
+
     const updatedTimes = { ...subjectTimes };
     delete updatedTimes[name];
 
@@ -142,7 +149,6 @@ function StudyPage() {
   };
 
   const progress = (time % 3600000) / 3600000 * 360;
-  const progressColor = "#FFD400";
 
   return (
     <>
@@ -152,7 +158,6 @@ function StudyPage() {
       <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="study-container">
 
-          {/* 카테고리 박스 */}
           <div className="subject-box">
             <div className="subject-title">카테고리 관리</div>
 
@@ -187,12 +192,11 @@ function StudyPage() {
             </div>
           </div>
 
-          {/* 스톱워치 */}
           <div className="timer-box">
             <div
               className="timer-circle"
               style={{
-                background: `conic-gradient(${progressColor} ${progress}deg, #fff 0deg)`
+                background: `conic-gradient(#FFD400 ${progress}deg, #fff 0deg)`
               }}
             >
               <div className="timer-inner">
@@ -220,7 +224,6 @@ function StudyPage() {
             </div>
           </div>
 
-          {/* 기록 */}
           <div className="record-box">
             <div className="record-title">공부 기록</div>
 
@@ -249,7 +252,6 @@ function StudyPage() {
         </div>
       </div>
 
-      {/* 모달 팝업 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
