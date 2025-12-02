@@ -19,7 +19,6 @@
   gap: 24px;
 }
 
-/* 패널 공통 */
 .panel-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -42,33 +41,44 @@
 }
 
 .icon-img.large {
-  width: 24px;
-  height: 24px;
-  padding: 6px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--theme-accent) 25%, white); 
-  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
-  transition: 0.2s;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .icon-img.large:hover {
-  background: color-mix(in srgb, var(--theme-accent) 40%, white);
-  border-color: var(--theme-accent);
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
-/* 날짜칩 */
+.head-actions.spaced {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
 .date-chip {
-  background: color-mix(in srgb, var(--theme-accent) 25%, white);
-  border: 1px solid var(--theme-accent);
+  display: inline-block;
+  margin: 8px 0 12px;
+  background: #fff8d1;
   color: #222;
+  border: 1px solid var(--theme-accent);
   border-radius: 8px;
   padding: 4px 10px;
   font-weight: 700;
 }
 
-/* To-do */
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 180px; 
+  overflow-y: auto;
+}
+
 .todo-item {
   display: flex;
   justify-content: space-between;
@@ -83,7 +93,13 @@
 }
 
 .todo-item:hover {
-  background: #fffde6;
+  background: color-mix(in srgb, var(--theme-accent) 25%, white);
+}
+
+.todo-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .todo-title.done {
@@ -97,7 +113,6 @@
   margin-top: 3px;
 }
 
-/* Diary */
 .diary-box {
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -112,18 +127,35 @@
   color: var(--text);
 }
 
-/* 캘린더 카드 */
+.diary-content {
+  color: #444;
+  white-space: pre-wrap;
+}
+
 .calendar-card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-  height: 640px;
+  height: 640;
   overflow-y: hidden;
 }
 
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.month-label {
+  font-weight: 800;
+  font-size: 18px;
+}
+
 .nav-btn {
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
   background: #f5f5f5;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -132,15 +164,28 @@
 }
 
 .nav-btn:hover {
+  background: #f5f5f5;
   border-color: var(--theme-accent);
 }
 
-/* grid */
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: 800;
+  color: #666;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
-  height: 440px;
+  height: 440;
   overflow-y: auto;
 }
 
@@ -154,7 +199,7 @@
   transition: all .18s;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;     
+  justify-content: flex-start;
   position: relative;
 }
 
@@ -163,19 +208,31 @@
   box-shadow: 0 1px 6px rgba(255, 212, 0, .25);
 }
 
+.cell.dim {
+  background: #fbfbfb;
+  color: #bbb;
+}
+
 .cell.selected {
   outline: 2px solid var(--theme-accent);
   outline-offset: -2px;
 }
 
+.day {
+  font-weight: 800;
+  color: var(--text);
+  margin-left: 2px;
+}
+
 .todo-underline {
   position: absolute;
-  top: 50%;             
+  top: 55%;
   left: 4px;
   right: 4px;
   transform: translateY(-50%);
-  height: 10px;
-  background: #fff475;
+  height: 15px;
+  background: color-mix(in srgb, var(--theme-accent) 25%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
   border-radius: 6px;
   display: flex;
   justify-content: center;
@@ -183,10 +240,9 @@
   font-size: 12px;
   font-weight: 700;
   color: #000;
-  box-shadow: 0 0 6px rgba(255, 212, 0, 0.7);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--theme-accent) 25%, white);
 }
 
-/* Diary dot */
 .diary-dot {
   position: absolute;
   top: 4px;
@@ -196,4 +252,146 @@
   background: #4da3ff;
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(77, 163, 255, 0.7);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal {
+  width: 460px;
+  max-width: 92vw;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+}
+
+.modal-title {
+  font-weight: 800;
+  font-size: 18px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  font-weight: 700;
+  color: #444;
+}
+
+.field input,
+.field textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.modal-actions {
+  padding: 12px 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background: #eee;
+  color: #222;
+}
+
+.btn.secondary:hover {
+  background: #ddd;
+}
+
+.btn.primary {
+  background: var(--theme-accent);
+  color: #222;
+}
+
+.btn.primary:hover {
+  background: color-mix(in srgb, var(--theme-accent) 85%, black 15%);
+}
+
+.icon-delete {
+  width: 35px;
+  height: 35px;
+  cursor:pointer;
+  transition: 0.2s;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--theme-accent) 25%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
+}
+
+.icon-delete:hover {
+  transform:scale(1.1);
+}
+
+@media (max-width: 960px) {
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.diary-section {
+  margin-top: 12px;
+}
+
+.date-chip {
+  background: color-mix(in srgb, var(--theme-accent) 25%, white);
+  border: 1px solid var(--theme-accent);
+  color: #222;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+.icon-img.large {
+  width: 24px;
+  height: 24px;
+  padding: 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--theme-accent) 25%, white);
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.icon-img.large:hover {
+  background: color-mix(in srgb, var(--theme-accent) 40%, white);
+  border-color: var(--theme-accent);
+  transform: scale(1.08);
 }

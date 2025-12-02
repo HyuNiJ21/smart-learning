@@ -60,7 +60,7 @@
 }
 
 .no-img-text {
-  font-size: 14px;
+  font-size: 15px;
   color: #888;
 }
 
@@ -77,7 +77,7 @@
 
 /* 바로가기 */
 .more-link {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--theme-accent);
   text-decoration: none;
   font-weight: bold;
