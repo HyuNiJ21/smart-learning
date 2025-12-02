@@ -1,20 +1,28 @@
+/* =========================================================
+   HEADER1 (상단 고정 헤더)
+   - 로그인/비로그인 공통
+   - 드롭다운/아이콘 포함
+========================================================= */
+
 /* 헤더 전체 */
 .header1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  background-color: #fff !important;   /* 무조건 흰색 */
-  border-bottom: 1px solid #eee;
+  width: 100%;
   height: 58px;
-  padding: 0 40px;
-  font-family: "Pretendard", sans-serif;
+  box-sizing: border-box;
+  background-color: #fff !important;
+  border-bottom: 1px solid #eee;
 
+  padding: 0 40px;
   position: fixed;
   top: 0;
   left: 0;
-  width: 95%;
-  z-index: 1000;
+  z-index: 2000;
+
+  font-family: "Pretendard", sans-serif;
 }
 
 /* 로고 */
@@ -26,27 +34,29 @@
   transition: color 0.2s;
 }
 
-/* 메뉴 공통 */
+.logo:hover {
+  color: #111;
+}
+
+/* 메뉴 영역 */
 .menu {
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative; /* 드롭다운 기준점 */
 }
 
-/* 로그인 전 버튼 */
+/* 로그인 전/후 버튼 공통 */
 .menu-btn {
   background: none;
   border: none;
-  color: #9CA2AE;
   cursor: pointer;
   font-size: 14px;
+  color: #9CA2AE;
 }
 
-/* 로그인 후 버튼 */
-.menu-btn.gray {
-  background: none;
-  border: none;
-  color: #9CA2AE;
+.menu-btn:hover {
+  color: #555;
 }
 
 /* 프로필 아이콘 */
@@ -58,95 +68,69 @@
   transition: transform 0.2s;
 }
 
-/* 프로필 hover */
 .user-icon:hover {
   transform: scale(1.1);
 }
 
-/* 비활성화된 아이콘 (로그인 전) */
+/* 비로그인 상태 아이콘 */
 .user-icon.disabled {
   opacity: 0.4;
   cursor: default;
+  transform: none;
 }
 
 /* 알림 아이콘 */
 .alarm-icon {
   cursor: pointer;
-  margin-right: 8px;
+  margin-right: 10px;
+  transition: transform 0.2s, color 0.2s;
   color: #4d4d4d;
 }
 
 .alarm-icon:hover {
   transform: scale(1.1);
-  transition: 0.2s;
+  color: #111;
 }
 
-/* 드롭다운 전체 */
-.dropdown-menu {
-  position: absolute;
-  top: 55px;
-  right: 40px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 150px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  animation: fadeIn 0.2s ease;
-  z-index: 2000;
-}
-
-/* 드롭다운 내부 p 태그 */
-.dropdown-menu p {
-  margin: 0;
-  padding: 12px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-/* 드롭다운 hover */
-.dropdown-menu p:hover {
-  background: #f4f4f4;
-}
-
-/* 애니메이션 */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 알림 아이콘 */
-.alarm-icon {
-  margin-right: 14px;
-  cursor: pointer;
-}
-
-/* 드롭다운 메뉴 */
-.menu {
-  position: relative;
-}
+/* =========================================================
+   DROPDOWN MENU
+========================================================= */
 
 .dropdown-menu {
   position: absolute;
-  top: 48px;
+  top: calc(100% + 8px); /* 헤더 기준 자동 정렬 */
   right: 0;
+
   background: #fff;
   border: 1px solid #eee;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  min-width: 140px;
   padding: 6px 0;
-  min-width: 120px;
-  z-index: 1200;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.2s ease;
+
+  z-index: 3000;
 }
 
+/* 드롭다운 메뉴 항목 */
 .dropdown-menu p {
   margin: 0;
-  padding: 8px 14px;
+  padding: 10px 14px;
   font-size: 14px;
   cursor: pointer;
   white-space: nowrap;
+  color: #333;
+  transition: background 0.15s;
 }
 
 .dropdown-menu p:hover {
   background-color: #f5f5f5;
+}
+
+/* fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
