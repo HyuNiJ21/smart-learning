@@ -3,9 +3,17 @@
   width: 100%;
 }
 
+.tab-inner h2,
+.admin-community-tab h2 {
+  font-size: 22px !important;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 25px;
+}
+
 /* 제목 */
 .community-tab h2 {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   margin-bottom: 25px;
   color: #333;
@@ -220,6 +228,7 @@
   justify-content: center;
   gap: 14px;
 }
+
 /* 문의 개수 표시 박스 */
 .qna-stats-box {
   display: flex;
@@ -257,7 +266,8 @@
   border-radius: 8px;
   line-height: 1.5;
 }
-/* 리자 문의 통계 박스 */
+
+/* 관리자 문의 통계 박스 */
 .qna-stats-box {
   display: flex;
   align-items: center;

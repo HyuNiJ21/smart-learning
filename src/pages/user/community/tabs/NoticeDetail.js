@@ -51,7 +51,7 @@ function NoticeDetail() {
           {/* 사이드바 */}
           <div className="community-sidebar-container">
             <div className="profile-sidebar">
-              <p className="sidebar-title">커뮤니티</p>
+              <p className="sidebar-title">공지 및 문의</p>
               <ul>
                 <li className="active" onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}>공지사항</li>
                 <li onClick={() => navigate("/user/community")}>FAQ & 1:1 문의</li>
