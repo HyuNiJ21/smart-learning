@@ -110,7 +110,7 @@
 }
 
 .gray-btn {
-  background: #eee;
+  background: var(--theme-accent);
   border: none;
   border-radius: 30px;
   padding: 10px 25px;
