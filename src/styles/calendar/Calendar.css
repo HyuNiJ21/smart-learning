@@ -205,7 +205,7 @@
 
 .cell:hover {
   border-color: var(--theme-accent);
-  box-shadow: 0 1px 6px rgba(255, 212, 0, .25);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--theme-accent) 25%, white);
 }
 
 .cell.dim {
@@ -231,8 +231,7 @@
   right: 4px;
   transform: translateY(-50%);
   height: 15px;
-  background: color-mix(in srgb, var(--theme-accent) 25%, white);
-  border: 1px solid color-mix(in srgb, var(--theme-accent) 60%, white);
+  background: color-mix(in srgb, var(--theme-accent) 50%, white);
   border-radius: 6px;
   display: flex;
   justify-content: center;
