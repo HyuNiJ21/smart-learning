@@ -157,7 +157,7 @@ function AdminFaqTab() {
                   수정
                 </button>
                 <button
-                  className="action-btn delete-btn"
+                  className="action-btn edit-btn"
                   onClick={() => handleDelete(item.id)}
                 >
                   삭제
