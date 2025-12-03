@@ -50,7 +50,7 @@
 
 .small-btn {
   border: none;
-  background: #FFD400;
+  background: var(--theme-bg);
   padding: 5px 10px;
   border-radius: 8px;
   font-weight: bold;
@@ -106,7 +106,7 @@
 }
 
 .yellow-btn {
-  background: #FFD400;
+  background: var(--theme-bg);
   border: none;
   padding: 10px 25px;
   border-radius: 10px;
@@ -116,7 +116,7 @@
 }
 
 .yellow-btn:hover {
-  background: #e6c200;
+  background: var(--theme-bg);
 }
 
 .gray-btn {
@@ -264,7 +264,7 @@
   transition: background-color 0.3s ease;
 }
 .toggle-switch.on {
-  background-color: #FFD400;
+  background-color: var(--theme-bg);
 }
 .toggle-circle {
   position: absolute;
@@ -301,11 +301,11 @@
 
 .theme-box:hover {
   transform: scale(1.05);
-  border: 2px solid #FFD400;
+  border: 2px solid #e0e0e0;
 }
 
 .theme-box.selected {
-  border: 3px solid #FFD400;
+  border: 3px solid #e0e0e0;
   transform: scale(1.08);
 }
 
@@ -360,7 +360,7 @@ h2 {
 }
 
 .search-btn {
-  background: #FFD400;
+  background: var(--theme-bg);
   border: none;
   padding: 7px 10px;
   margin-left: 5px;
@@ -458,7 +458,7 @@ h2 {
 }
 
 .common-btn {
-  background: #FFD400;
+  background: var(--theme-bg);
   border: none;
   color: #333;
   font-weight: bold;
@@ -469,7 +469,7 @@ h2 {
 }
 
 .common-btn:hover {
-  background: #e6c200;
+  background: var(--theme-bg);
 }
 
 .cancel-btn {

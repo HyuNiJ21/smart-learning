@@ -7,8 +7,8 @@ function SettingTab() {
   const [selectedTheme, setSelectedTheme] = useState("#9CA2AE");
 
   const themes = [
-    "#BFC0C4", "#F9C4C4", "#FFE5C1", "#ffeeB5",
-    "#6C7A89", "#D9C9D9", "#E6F2F8", "#BFEDE0",
+    "#BFC0C4", "#F9C4C4", "#ffc1e7ff", "#ffeeB5",
+    "#6C7A89", "#D9C9D9", "#bfd6edff", "#c1ffceff",
   ];
 
   useEffect(() => {

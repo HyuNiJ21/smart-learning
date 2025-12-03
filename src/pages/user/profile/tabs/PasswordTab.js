@@ -82,7 +82,7 @@ function PasswordTab({ onBack }) {
 
         <div className="pw-btns">
           <button type="submit" className="yellow-btn">변경</button>
-          <button type="button" className="gray-btn" onClick={onBack}>
+          <button type="button" className="yellow-btn" onClick={onBack}>
             취소
           </button>
         </div>

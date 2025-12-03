@@ -37,7 +37,7 @@
 /*  [GamePage.js] 게임 선택 페이지 */
 /* 제목 */
 .wordgame-title {
-  font-size: 22px;
+  font-size: 30px;
   font-weight: 800;
   color: #333;
   margin-bottom: 40px;
@@ -483,7 +483,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 9999;
+  z-index: 500 !important;
 }
 
 .game-out-btns {
