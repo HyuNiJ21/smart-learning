@@ -5,7 +5,7 @@ import { User, Settings } from "lucide-react";
 function AdminSidebar({ activeTab, goToTab }) {
   return (
     <div className="profile-sidebar">
-      <p className="sidebar-title">관리자 정보</p>
+      <p className="sidebar-title">관리자 설정</p>
       <ul>
         <li
           className={activeTab === "profile" ? "active" : ""}

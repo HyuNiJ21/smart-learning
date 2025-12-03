@@ -74,7 +74,6 @@ function AdminProfileTab({ onNavigatePassword }) {
           <button className="yellow-btn" onClick={onNavigatePassword}>
             비밀번호 재설정
           </button>
-          <button className="gray-btn">취소</button>
         </div>
       </div>
     </div>

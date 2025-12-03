@@ -79,7 +79,7 @@ export default function AdminPasswordTab({ goToTab }) {
           <button className="yellow-btn" onClick={handleChangePassword}>
             변경
           </button>
-          <button className="gray-btn" onClick={handleCancel}>
+          <button className="yellow-btn" onClick={handleCancel}>
             취소
           </button>
         </div>
