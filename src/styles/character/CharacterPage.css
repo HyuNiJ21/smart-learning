@@ -10,7 +10,6 @@
   font-family: "Pretendard", sans-serif;
 }
 
-/* --- 왼쪽 큰 이미지 영역 --- */
 .character-left {
   background: #fff;
   width: clamp(250px, 30vw, 400px);
@@ -27,7 +26,6 @@
   object-fit: contain;
 }
 
-/* --- 오른쪽 정보 카드 --- */
 .character-right {
   background: color-mix(in srgb, var(--theme-accent) 25%, white);
   border-radius: 30px;
@@ -80,7 +78,6 @@
   font-weight: 500;
 }
 
-/* --- 버튼 그룹 --- */
 .btn-group {
   display: flex;
   justify-content: center;
@@ -119,7 +116,6 @@
   cursor: pointer;
 }
 
-/* --- 캐릭터 선택 --- */
 .carousel-wrapper {
   position: relative;
   display: flex;
@@ -195,3 +191,5 @@
   width: 60%;
   text-align: center;
 }
+
+

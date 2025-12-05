@@ -1,17 +1,14 @@
-/* 전체 배경 */
 .ranking-page {
   background-color: var(--theme-bg) !important;
   min-height: 100vh;
 }
 
-/* 컨테이너 */
 .ranking-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 60px 16px;
 }
 
-/* 제목 */
 .ranking-container h2 {
   text-align: center;
   font-size: 22px;
@@ -20,7 +17,6 @@
   margin-bottom: 20px;
 }
 
-/* 표 스타일 */
 .ranking-table {
   width: 100%;
   border-collapse: collapse;
@@ -52,3 +48,20 @@
 .ranking-table tr:last-child td {
   border-bottom: none;
 }
+
+.ranking-scroll-box {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-top: 16px;
+  border-radius: 8px;
+}
+
+.ranking-scroll-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ranking-scroll-box::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+}
+

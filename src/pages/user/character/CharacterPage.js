@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header1 from "@/components/common/Header1";
 import Header2 from "@/components/common/Header2";
 import "@/styles/character/CharacterPage.css";
@@ -25,6 +25,14 @@ function CharacterPage() {
   const [character, setCharacter] = useState("tree");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userLevel] = useState(5);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
 
   const handleNameChange = () => {
     if (!newName.trim()) return;
@@ -70,7 +78,14 @@ function CharacterPage() {
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
-      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+      <div
+        className="page-content"
+        style={{
+          paddingTop: "93px",
+          minHeight: "calc(100vh - 93px)",
+          boxSizing: "border-box",
+        }}
+      >
         <div className="character-page">
           <div className="character-container">
             <div className="character-left">{renderCharacterImage()}</div>
