@@ -78,7 +78,7 @@
 }
 
 .timeline-item {
-  background: #fffdf0;
+  background: color-mix(in srgb, var(--theme-accent) 20%, white);
   border: 2px solid var(--theme-accent);
   border-left: 6px solid var(--theme-accent);
   border-radius: 12px;
