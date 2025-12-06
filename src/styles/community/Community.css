@@ -1,7 +1,6 @@
 /* 전체 배경 */
 .community-wrapper {
   display: flex;
-  min-height: calc(100vh - 120px);
   background-color: var(--theme-bg) !important;
 }
 
