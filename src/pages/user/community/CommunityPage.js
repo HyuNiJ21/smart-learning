@@ -34,33 +34,39 @@ function CommunityPage() {
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
 
-      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
-      {/* 전체 배경 + 영역 */}
-      <div className="community-wrapper">
-        {/* 왼쪽 사이드바 */}
-        <div className="community-sidebar-container">
-          <div className="profile-sidebar">
-            <p className="sidebar-title">공지 및 문의</p>
-            <ul>
-              <li
-                className={activeTab === "notice" ? "active" : ""}
-                onClick={() => setActiveTab("notice")}
-              >
-                공지사항
-              </li>
-              <li
-                className={activeTab === "faq" ? "active" : ""}
-                onClick={() => setActiveTab("faq")}
-              >
-                FAQ & 1:1 문의
-              </li>
-            </ul>
+      <div
+        className="page-content"
+        style={{
+          paddingTop: "93px",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* 전체 배경 + 영역 */}
+        <div className="community-wrapper">
+          {/* 왼쪽 사이드바 */}
+          <div className="community-sidebar-container">
+            <div className="profile-sidebar">
+              <p className="sidebar-title">공지 및 문의</p>
+              <ul>
+                <li
+                  className={activeTab === "notice" ? "active" : ""}
+                  onClick={() => setActiveTab("notice")}
+                >
+                  공지사항
+                </li>
+                <li
+                  className={activeTab === "faq" ? "active" : ""}
+                  onClick={() => setActiveTab("faq")}
+                >
+                  FAQ & 1:1 문의
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
 
-        {/* 오른쪽 탭 콘텐츠 */}
-        <div className="community-main-content">{renderContent()}</div>
-      </div>
+          {/* 오른쪽 탭 콘텐츠 */}
+          <div className="community-main-content">{renderContent()}</div>
+        </div>
       </div>
     </>
   );

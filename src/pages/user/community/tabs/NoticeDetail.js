@@ -39,22 +39,40 @@ function NoticeDetail() {
     });
   };
 
+  const goList = () => {
+    navigate("/user/community", { state: { defaultTab: "notice" } });
+  };
+
   return (
     <>
       {/* 상단 헤더 */}
       <Header1 isLoggedIn={true} />
       <Header2 isLoggedIn={true} />
-      
-      <div className="page-content" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
-        {/* 전체 커뮤니티 구조 유지 */}
+
+      <div
+        className="page-content"
+        style={{
+          paddingTop: "93px",
+          minHeight: "calc(100vh - 93px)",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* 전체 커뮤니티 구조 */}
         <div className="community-wrapper">
           {/* 사이드바 */}
           <div className="community-sidebar-container">
             <div className="profile-sidebar">
               <p className="sidebar-title">공지 및 문의</p>
               <ul>
-                <li className="active" onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}>공지사항</li>
-                <li onClick={() => navigate("/user/community")}>FAQ & 1:1 문의</li>
+                <li
+                  className="active"
+                  onClick={goList}
+                >
+                  공지사항
+                </li>
+                <li onClick={() => navigate("/user/community")}>
+                  FAQ & 1:1 문의
+                </li>
               </ul>
             </div>
           </div>
@@ -64,13 +82,26 @@ function NoticeDetail() {
             <div className="tab-inner notice-tab">
               <div className="write-form">
                 <h2>{item.title}</h2>
+                <p style={{ color: "#777", marginTop: "6px" }}>
+                  작성시간: {item.time}
+                </p>
                 <hr />
-                <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{item.content}</p>
-                <p style={{ color: "#777", marginTop: "10px" }}>작성시간: {item.time}</p>
+                <p
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    lineHeight: "1.6",
+                    marginTop: "14px",
+                  }}
+                >
+                  {item.content}
+                </p>
               </div>
 
               {/* 버튼 영역 */}
-              <div className="btn-right" style={{ gap: "6px", marginTop: "12px" }}>
+              <div
+                className="btn-right"
+                style={{ gap: "6px", marginTop: "12px" }}
+              >
                 <button
                   className="common-btn small-btn"
                   onClick={handlePrev}
@@ -85,16 +116,14 @@ function NoticeDetail() {
                 </button>
                 <button
                   className="cancel-btn small-btn"
-                  onClick={() => navigate("/user/community", { state: { defaultTab: "notice" } })}
+                  onClick={goList}
                 >
                   목록으로
                 </button>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </>
   );

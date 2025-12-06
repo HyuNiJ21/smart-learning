@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../styles/community/Tabs.css";
 import WriteTab from "./AdminWriteTab";
 
@@ -19,11 +19,13 @@ const initialFaqList = [
 
 function AdminFaqTab() {
   const [sort, setSort] = useState("new");
-  const [search, setSearch] = useState("");
+
+  const [searchInput, setSearchInput] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+
   const [isWriting, setIsWriting] = useState(false);
   const [editPost, setEditPost] = useState(null);
 
-  // 원본 / 표시 리스트 분리
   const [faqList, setFaqList] = useState(initialFaqList);
   const [displayFaqList, setDisplayFaqList] = useState(initialFaqList);
 
@@ -39,9 +41,17 @@ function AdminFaqTab() {
     return new Date(year, month - 1, day, hour, minute).getTime();
   };
 
-  // 검색
-  const handleSearch = () => {
-    const keyword = search.trim().toLowerCase();
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const applySearchKeyword = () => {
+    setSearchKeyword(searchInput);
+  };
+
+  useEffect(() => {
+    const keyword = searchKeyword.trim().toLowerCase();
+
     if (!keyword) {
       setDisplayFaqList(faqList);
       return;
@@ -52,21 +62,19 @@ function AdminFaqTab() {
         item.title.toLowerCase().includes(keyword) ||
         (item.content && item.content.toLowerCase().includes(keyword))
     );
+
     setDisplayFaqList(filtered);
-  };
+  }, [searchKeyword, faqList]);
 
-  // 정렬
-  const sortedFaq = [...displayFaqList]
-    .sort((a, b) =>
-      sort === "new"
-        ? parseDate(b.time) - parseDate(a.time)
-        : parseDate(a.time) - parseDate(b.time)
-    )
-    .map((item, idx, arr) => ({ ...item, no: arr.length - idx }));
+  const sortedFaq = [...displayFaqList].sort((a, b) =>
+    sort === "new"
+      ? parseDate(b.time) - parseDate(a.time)
+      : parseDate(a.time) - parseDate(b.time)
+  );
 
-  // 삭제
   const handleDelete = (id) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
     const updated = faqList.filter((i) => i.id !== id);
     setFaqList(updated);
     setDisplayFaqList(updated);
@@ -83,6 +91,7 @@ function AdminFaqTab() {
         }}
         onSubmit={(newPost) => {
           let updated;
+
           if (editPost) {
             updated = faqList.map((i) =>
               i.id === newPost.id ? newPost : i
@@ -90,6 +99,7 @@ function AdminFaqTab() {
           } else {
             updated = [{ id: Date.now(), ...newPost }, ...faqList];
           }
+
           setFaqList(updated);
           setDisplayFaqList(updated);
           setIsWriting(false);
@@ -108,15 +118,16 @@ function AdminFaqTab() {
         <input
           type="text"
           placeholder="검색하세요."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={handleInputChange}
+          onKeyDown={(e) => e.key === "Enter" && applySearchKeyword()}
         />
-        <button className="search-btn" onClick={handleSearch}>
+        <button className="search-btn" onClick={applySearchKeyword}>
           검색
         </button>
       </div>
 
-      {/* 정렬 버튼 */}
+      {/* 정렬 */}
       <div className="sort-row">
         <button
           className={`sort-btn ${sort === "new" ? "active" : ""}`}
@@ -136,7 +147,6 @@ function AdminFaqTab() {
       <table className="table">
         <thead>
           <tr>
-            <th>No</th>
             <th>제목</th>
             <th>작성시간</th>
             <th>관리</th>
@@ -146,7 +156,6 @@ function AdminFaqTab() {
         <tbody>
           {sortedFaq.map((item) => (
             <tr key={item.id}>
-              <td>{item.no}</td>
               <td>{item.title}</td>
               <td>{item.time}</td>
               <td className="action-cell">

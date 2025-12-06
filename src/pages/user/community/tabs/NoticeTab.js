@@ -20,14 +20,14 @@ const initialNoticeList = [
 
 function NoticeTab() {
   const [sort, setSort] = useState("new");
-  const [search, setSearch] = useState("");
+
+  const [searchInput, setSearchInput] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const [noticeList] = useState(initialNoticeList);
-  const [displayList, setDisplayList] = useState(initialNoticeList);
 
   const navigate = useNavigate();
 
-  // 날짜 파싱함수
   const parseDate = (t) => {
     if (!t) return 0;
     const [year, month, day, hour, minute] = t
@@ -40,31 +40,31 @@ function NoticeTab() {
     return new Date(year, month - 1, day, hour, minute).getTime();
   };
 
-  // 검색 버튼 클릭
-  const handleSearchClick = () => {
-    const keyword = search.trim().toLowerCase();
-
-    if (!keyword) {
-      setDisplayList(noticeList);
-      return;
-    }
-
-    const filtered = noticeList.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.content.toLowerCase().includes(keyword)
-    );
-    setDisplayList(filtered);
+  const applySearchKeyword = () => {
+    setSearchKeyword(searchInput);
   };
 
-  // 정렬 적용 리스트
-  const sortedList = [...displayList]
-    .sort((a, b) =>
-      sort === "new"
-        ? parseDate(b.time) - parseDate(a.time)
-        : parseDate(a.time) - parseDate(b.time)
-    )
-    .map((item, index, arr) => ({ ...item, no: arr.length - index }));
+  const handleInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      applySearchKeyword();
+    }
+  };
+
+  const filteredList = noticeList.filter((item) => {
+    if (!searchKeyword.trim()) return true;
+
+    const keyword = searchKeyword.toLowerCase();
+    return (
+      item.title.toLowerCase().includes(keyword) ||
+      item.content.toLowerCase().includes(keyword)
+    );
+  });
+
+  const sortedList = [...filteredList].sort((a, b) =>
+    sort === "new"
+      ? parseDate(b.time) - parseDate(a.time)
+      : parseDate(a.time) - parseDate(b.time)
+  );
 
   // 상세 페이지 이동
   const handleViewNotice = (item) => {
@@ -82,10 +82,11 @@ function NoticeTab() {
         <input
           type="text"
           placeholder="검색하세요."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleInputKeyDown}
         />
-        <button className="search-btn" onClick={handleSearchClick}>
+        <button className="search-btn" onClick={applySearchKeyword}>
           <Search size={18} />
         </button>
       </div>
@@ -110,7 +111,6 @@ function NoticeTab() {
       <table className="table">
         <thead>
           <tr>
-            <th>No</th>
             <th>제목</th>
             <th>작성시간</th>
           </tr>
@@ -122,7 +122,6 @@ function NoticeTab() {
               style={{ cursor: "pointer" }}
               onClick={() => handleViewNotice(item)}
             >
-              <td>{item.no}</td>
               <td>{item.title}</td>
               <td>{item.time}</td>
             </tr>

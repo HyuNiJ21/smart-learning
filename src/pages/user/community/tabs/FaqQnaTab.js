@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../../../styles/community/Tabs.css";
 import { Search } from "lucide-react";
 import WriteTab from "./WriteTab";
 
-// FAQ 초기 데이터
 const initialFaqList = [
   {
     id: 1,
@@ -19,44 +18,35 @@ const initialFaqList = [
   },
 ];
 
-// 1:1 문의 초기 데이터 (대화 여러 번 가능)
 const initialQnaList = [
   {
     id: 1,
     title: "첫번째 문의",
-    time: "2025년 11월 3일 13:10",
-    messages: [
-      {
-        id: 1,
-        sender: "user",
-        text: "테스트입니다.",
-        time: "2025년 11월 3일 13:10",
-      },
-      {
-        id: 2,
-        sender: "admin",
-        text: "안녕하세요! 문의 주셔서 감사합니다.",
-        time: "2025년 11월 3일 14:00",
-      },
-    ],
+    content: "테스트 문의입니다.",
+    userTime: "2025년 11월 3일 13:10",
+    userUpdatedTime: "",
+    answer: "안녕하세요! 문의 주셔서 감사합니다.",
+    answerTime: "2025년 11월 3일 14:00",
+    answerUpdatedTime: "",
   },
 ];
 
 function FaqQnaTab() {
-  const [activeSubTab, setActiveSubTab] = useState("faq"); // faq | qna
-  const [search, setSearch] = useState("");
+  const [activeSubTab, setActiveSubTab] = useState("faq");
+
+  const [searchInput, setSearchInput] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+
   const [isWriting, setIsWriting] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [sort, setSort] = useState("new"); // new | old
+  const [isEditing, setIsEditing] = useState(false);
+  const [sort, setSort] = useState("new");
 
-  // 사용자 추가 문의 입력값
   const [replyText, setReplyText] = useState("");
 
-  // 실제 데이터(원본)
   const [faqList] = useState(initialFaqList);
   const [qnaList, setQnaList] = useState(initialQnaList);
 
-  // 날짜 파싱
   const parseDate = (t) => {
     if (!t) return 0;
     const [year, month, day, hour, minute] = t
@@ -69,16 +59,58 @@ function FaqQnaTab() {
     return new Date(year, month - 1, day, hour, minute).getTime();
   };
 
-  const hasAdminReply = (item) =>
-    item.messages && item.messages.some((m) => m.sender === "admin");
+  const hasAdminReply = (item) => !!item.answer;
 
-  const handleSearchClick = () => {
-    // 필터는 상태(search) 기반으로 항상 적용되기 때문에
-    // 이 함수는 "버튼을 눌러 검색한다"는 UX용으로만 존재
-    // 굳이 로직을 넣을 필요는 없음
+  const applySearchKeyword = () => {
+    setSearchKeyword(searchInput);
   };
 
-  // 문의 추가
+  const handleInputKeyDown = (e) => {
+    if (e.key === "Enter") applySearchKeyword();
+  };
+
+  const filteredFaq = faqList.filter((item) => {
+    if (!searchKeyword.trim()) return true;
+
+    const keyword = searchKeyword.toLowerCase();
+    return (
+      item.title.toLowerCase().includes(keyword) ||
+      item.content.toLowerCase().includes(keyword)
+    );
+  });
+
+  const sortedFaq = [...filteredFaq].sort((a, b) =>
+    sort === "new"
+      ? parseDate(b.time) - parseDate(a.time)
+      : parseDate(a.time) - parseDate(b.time)
+  );
+
+  const filteredQna = qnaList.filter((item) => {
+    if (!searchKeyword.trim()) return true;
+
+    const keyword = searchKeyword.toLowerCase();
+    return (
+      item.title.toLowerCase().includes(keyword) ||
+      item.content.toLowerCase().includes(keyword) ||
+      (item.answer && item.answer.toLowerCase().includes(keyword))
+    );
+  });
+
+  const sortedQna = [...filteredQna].sort((a, b) =>
+    sort === "new"
+      ? parseDate(b.userTime) - parseDate(a.userTime)
+      : parseDate(a.userTime) - parseDate(b.userTime)
+  );
+
+  const listToShow = activeSubTab === "faq" ? sortedFaq : sortedQna;
+
+  const handleViewPost = (item) => {
+    if (activeSubTab !== "qna") return;
+    setSelectedPost(item);
+    setReplyText(item.content);
+    setIsEditing(false);
+  };
+
   const handleAddQna = (newPost) => {
     const now = new Date();
     const timeStr = `${now.getFullYear()}년 ${String(
@@ -87,223 +119,143 @@ function FaqQnaTab() {
       now.getHours()
     ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-    const firstMessage = {
-      id: 1,
-      sender: "user",
-      text: newPost.content,
-      time: timeStr,
-    };
-
     const newItem = {
       id: Date.now(),
       title: newPost.title,
-      time: timeStr,
-      messages: [firstMessage],
+      content: newPost.content,
+      userTime: timeStr,
+      userUpdatedTime: "",
+      answer: "",
+      answerTime: "",
+      answerUpdatedTime: "",
     };
 
-    const updated = [newItem, ...qnaList];
-    setQnaList(updated);
+    setQnaList([newItem, ...qnaList]);
     setIsWriting(false);
   };
 
-  // 사용자 추가 문의 등록
-  const handleUserReplySubmit = () => {
-    if (!selectedPost) return;
+  const handleUserEditSubmit = () => {
     if (!replyText.trim()) {
       alert("내용을 입력하세요.");
       return;
     }
 
     const now = new Date();
-    const replyTime = `${now.getFullYear()}년 ${String(
+    const updatedTime = `${now.getFullYear()}년 ${String(
       now.getMonth() + 1
     ).padStart(2, "0")}월 ${String(now.getDate()).padStart(2, "0")}일 ${String(
       now.getHours()
     ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-    const updatedQna = qnaList.map((item) => {
-      if (item.id !== selectedPost.id) return item;
-
-      const nextId =
-        item.messages.length > 0
-          ? item.messages[item.messages.length - 1].id + 1
-          : 1;
-
-      const newMsg = {
-        id: nextId,
-        sender: "user",
-        text: replyText,
-        time: replyTime,
-      };
-
-      return {
-        ...item,
-        messages: [...item.messages, newMsg],
-      };
-    });
-
-    setQnaList(updatedQna);
-
-    // 상세 보기 중인 글도 최신 상태로 반영
-    const updatedSelected = updatedQna.find(
-      (item) => item.id === selectedPost.id
+    const updated = qnaList.map((item) =>
+      item.id === selectedPost.id
+        ? { ...item, content: replyText, userUpdatedTime: updatedTime }
+        : item
     );
-    setSelectedPost(updatedSelected);
-    setReplyText("");
 
-    alert("추가 문의가 등록되었습니다.");
+    setQnaList(updated);
+    setSelectedPost(updated.find((i) => i.id === selectedPost.id));
+    setIsEditing(false);
+    alert("문의가 수정되었습니다.");
   };
 
-  // 선택된 글이 바뀌면 입력창 초기화
-  useEffect(() => {
-    if (selectedPost) {
-      setReplyText("");
-    }
-  }, [selectedPost]);
-
-  // 글 삭제
   const handleDelete = (postId) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
-
-    const updated = qnaList.filter((item) => item.id !== postId);
-    setQnaList(updated);
+    setQnaList(qnaList.filter((item) => item.id !== postId));
     setSelectedPost(null);
   };
 
-  // 글 상세 보기
-  const handleViewPost = (item) => {
-    setSelectedPost(item);
-  };
-
-  const handleBackToList = () => {
-    setSelectedPost(null);
-    setIsWriting(false);
-  };
-
-  // 검색 + 정렬 적용 (FAQ)
-  const keyword = search.trim().toLowerCase();
-
-  const filteredFaq = !keyword
-    ? faqList
-    : faqList.filter(
-        (item) =>
-          item.title.toLowerCase().includes(keyword) ||
-          (item.content &&
-            item.content.toLowerCase().includes(keyword))
-      );
-
-  const sortedFaq = [...filteredFaq]
-    .sort((a, b) =>
-      sort === "new"
-        ? parseDate(b.time) - parseDate(a.time)
-        : parseDate(a.time) - parseDate(b.time)
-    )
-    .map((item, idx, arr) => ({ ...item, no: arr.length - idx }));
-
-  // 검색 + 정렬 적용 (QnA)
-  const filteredQna = !keyword
-    ? qnaList
-    : qnaList.filter((item) => {
-        const inTitle = item.title.toLowerCase().includes(keyword);
-        const inMessages =
-          item.messages &&
-          item.messages.some((m) =>
-            m.text.toLowerCase().includes(keyword)
-          );
-        return inTitle || inMessages;
-      });
-
-  const sortedQna = [...filteredQna]
-    .sort((a, b) =>
-      sort === "new"
-        ? parseDate(b.time) - parseDate(a.time)
-        : parseDate(a.time) - parseDate(b.time)
-    )
-    .map((item, idx, arr) => ({ ...item, no: arr.length - idx }));
-
-  const listToShow = activeSubTab === "faq" ? sortedFaq : sortedQna;
-
-  /* 상세 화면 (1:1 문의 상세) */
   if (selectedPost) {
     return (
       <div className="tab-inner faq-tab">
         <div className="write-form">
           <h2>{selectedPost.title}</h2>
-          <p style={{ color: "#777", marginTop: "4px" }}>
-            최초 작성시간: {selectedPost.time}
-          </p>
-          <hr style={{ margin: "16px 0" }} />
+          <p style={{ color: "#777" }}>작성시간: {selectedPost.userTime}</p>
+          {selectedPost.userUpdatedTime && (
+            <p style={{ color: "#777" }}>수정됨: {selectedPost.userUpdatedTime}</p>
+          )}
 
-          {/* 대화 내역  */}
-          <h3 style={{ marginBottom: "10px" }}>대화 내역</h3>
-          {selectedPost.messages.map((msg) => (
-            <div className="answer-box" key={msg.id}>
-              <div
-                style={{
-                  fontWeight: "bold",
-                  marginBottom: "4px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>
-                  {msg.sender === "admin" ? "관리자" : "사용자"}
-                </span>
-                <span style={{ fontSize: "12px", color: "#777" }}>
-                  {msg.time}
-                </span>
-              </div>
-              <p
-                style={{
-                  whiteSpace: "pre-wrap",
-                  lineHeight: "1.5",
-                  margin: 0,
-                }}
-              >
-                {msg.text}
+          <hr />
+
+          {/* 사용자 문의 내용 */}
+          <h3>문의 내용</h3>
+
+          {!isEditing ? (
+            <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.5" }}>
+              {selectedPost.content}
+            </p>
+          ) : (
+            <textarea
+              className="answer-textarea"
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+            />
+          )}
+
+          {/* 관리자 답변 */}
+          {selectedPost.answer && (
+            <>
+              <h3 style={{ marginTop: "20px" }}>관리자 답변</h3>
+              <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.5" }}>
+                {selectedPost.answer}
               </p>
-            </div>
-          ))}
+              <p style={{ color: "#777" }}>
+                {selectedPost.answerUpdatedTime
+                  ? `수정됨: ${selectedPost.answerUpdatedTime}`
+                  : selectedPost.answerTime
+                  ? `작성시간: ${selectedPost.answerTime}`
+                  : ""}
+              </p>
+            </>
+          )}
 
-          {/* 사용자 추가 문의 입력 영역 */}
-          <h3 style={{ marginTop: "24px", marginBottom: "8px" }}>
-            추가 문의
-          </h3>
-          <textarea
-            className="answer-textarea"
-            placeholder="관리자에게 추가 문의를 남길 수 있어요."
-            value={replyText}
-            onChange={(e) => setReplyText(e.target.value)}
-          />
+          {/* 버튼 영역 */}
+          <div className="btn-right" style={{ marginTop: "20px" }}>
+            {!isEditing ? (
+              <>
+                <button
+                  className="common-btn"
+                  onClick={() => setIsEditing(true)}
+                >
+                  수정
+                </button>
+                <button
+                  className="common-btn"
+                  onClick={() => handleDelete(selectedPost.id)}
+                >
+                  삭제
+                </button>
+              </>
+            ) : (
+              <button className="common-btn" onClick={handleUserEditSubmit}>
+                저장
+              </button>
+            )}
 
-          <div className="btn-right">
-            <button className="common-btn" onClick={handleUserReplySubmit}>
-              추가 문의 보내기
+            <button
+              className="cancel-btn"
+              onClick={() => {
+                setSelectedPost(null);
+                setIsEditing(false);
+              }}
+            >
+              목록으로
             </button>
           </div>
-        </div>
-
-        <div className="btn-right">
-          <button
-            className="common-btn"
-            onClick={() => handleDelete(selectedPost.id)}
-          >
-            삭제
-          </button>
-          <button className="cancel-btn" onClick={handleBackToList}>
-            목록으로
-          </button>
         </div>
       </div>
     );
   }
 
-  /* 글쓰기 모드 */
   if (isWriting) {
-    return <WriteTab onBack={handleBackToList} onSubmit={handleAddQna} />;
+    return (
+      <WriteTab
+        onBack={() => setIsWriting(false)}
+        onSubmit={handleAddQna}
+      />
+    );
   }
 
-  /* 목록 화면 */
   return (
     <div className="tab-inner faq-tab">
       <h2>{activeSubTab === "faq" ? "자주 묻는 질문" : "1:1 문의"}</h2>
@@ -329,10 +281,11 @@ function FaqQnaTab() {
         <input
           type="text"
           placeholder="검색하세요."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleInputKeyDown}
         />
-        <button className="search-btn" onClick={handleSearchClick}>
+        <button className="search-btn" onClick={applySearchKeyword}>
           <Search size={18} />
         </button>
       </div>
@@ -357,7 +310,6 @@ function FaqQnaTab() {
       <table className="table">
         <thead>
           <tr>
-            <th>No</th>
             <th>제목</th>
             <th>작성시간</th>
             {activeSubTab === "qna" && <th>답변상태</th>}
@@ -370,13 +322,10 @@ function FaqQnaTab() {
               style={{
                 cursor: activeSubTab === "qna" ? "pointer" : "default",
               }}
-              onClick={() =>
-                activeSubTab === "qna" ? handleViewPost(item) : null
-              }
+              onClick={() => handleViewPost(item)}
             >
-              <td>{item.no}</td>
               <td>{item.title}</td>
-              <td>{item.time}</td>
+              <td>{activeSubTab === "faq" ? item.time : item.userTime}</td>
               {activeSubTab === "qna" && (
                 <td
                   className={
@@ -395,7 +344,10 @@ function FaqQnaTab() {
 
       {activeSubTab === "qna" && (
         <div className="btn-right">
-          <button className="common-btn" onClick={() => setIsWriting(true)}>
+          <button
+            className="common-btn"
+            onClick={() => setIsWriting(true)}
+          >
             글쓰기
           </button>
         </div>
