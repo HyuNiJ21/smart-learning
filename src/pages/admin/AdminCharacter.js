@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminHeader1 from "../../components/common/AdminHeader1";
 import AdminHeader2 from "../../components/common/AdminHeader2";
-import Footer from "../../components/common/Footer";
 import "../../styles/admin/AdminCharacter.css";
 
 import snoopy1 from "../../assets/snoopy1.png";
@@ -60,6 +59,14 @@ export default function AdminCharacter() {
       setCharacters(characters.filter((c) => c.id !== id));
     }
   };
+  
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
 
   return (
     <>
@@ -76,22 +83,28 @@ export default function AdminCharacter() {
             {characters.length === 0 ? (
               <p className="adminChar-empty">등록된 캐릭터가 없습니다.</p>
             ) : (
-              <div className="adminChar-list">
-                {characters.map((char) => (
-                  <div key={char.id} className="adminChar-card">
-                    <img src={char.image} alt={char.name} className="adminChar-img" />
-                    <div className="adminChar-info">
-                      <h4>{char.name}</h4>
-                      <p>Lv. {char.level}</p>
+              <div className="adminChar-list-scroll">
+                <div className="adminChar-list">
+                  {characters.map((char) => (
+                    <div key={char.id} className="adminChar-card">
+                      <img
+                        src={char.image}
+                        alt={char.name}
+                        className="adminChar-img"
+                      />
+                      <div className="adminChar-info">
+                        <h4>{char.name}</h4>
+                        <p>Lv. {char.level}</p>
+                      </div>
+                      <button
+                        className="adminChar-delete"
+                        onClick={() => handleDelete(char.id)}
+                      >
+                        삭제
+                      </button>
                     </div>
-                    <button
-                      className="adminChar-delete"
-                      onClick={() => handleDelete(char.id)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -127,7 +140,11 @@ export default function AdminCharacter() {
 
               <label>
                 캐릭터 이미지 (PNG)
-                <input type="file" accept="image/png" onChange={handleImageUpload} />
+                <input
+                  type="file"
+                  accept="image/png"
+                  onChange={handleImageUpload}
+                />
               </label>
 
               {newChar.preview && (
@@ -142,8 +159,6 @@ export default function AdminCharacter() {
             </form>
           </div>
         </div>
-
-        <Footer />
       </div>
     </>
   );

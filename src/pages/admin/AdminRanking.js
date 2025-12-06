@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import AdminHeader1 from "../../components/common/AdminHeader1";
 import AdminHeader2 from "../../components/common/AdminHeader2";
-import Footer from "../../components/common/Footer";
 import "../../styles/admin/AdminRanking.css";
 
 export default function AdminRanking() {
@@ -13,6 +12,15 @@ export default function AdminRanking() {
     { id: 5, name: "유회승", level: 30 },
     { id: 6, name: "서동성", level: 15 },
   ]);
+
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
 
   const rankedUsers = useMemo(
     () => [...users].sort((a, b) => b.level - a.level),
@@ -54,6 +62,7 @@ export default function AdminRanking() {
 
         <div className="ranking-list-box">
           <h2 className="section-title">회원 레벨 순위</h2>
+
           <table className="ranking-table">
             <thead>
               <tr>
@@ -62,20 +71,23 @@ export default function AdminRanking() {
                 <th>레벨</th>
               </tr>
             </thead>
-            <tbody>
-              {rankedUsers.map((user, index) => (
-                <tr key={user.id}>
-                  <td>{index + 1}</td>
-                  <td>{user.name}</td>
-                  <td>{user.level}</td>
-                </tr>
-              ))}
-            </tbody>
           </table>
+
+          <div className="ranking-scroll-container">
+            <table className="ranking-table">
+              <tbody>
+                {rankedUsers.map((user, index) => (
+                  <tr key={user.id}>
+                    <td>{index + 1}</td>
+                    <td>{user.name}</td>
+                    <td>{user.level}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 }

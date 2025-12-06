@@ -22,7 +22,6 @@
   margin-bottom: 25px;
 }
 
-/* 리스트 박스 */
 .adminChar-list-box {
   flex: 1;
   background: #fff;
@@ -82,7 +81,6 @@
   background: #ff5050;
 }
 
-/* 추가 박스 */
 .adminChar-add-box {
   flex: 0 0 350px;
   background: #fff;
@@ -146,7 +144,6 @@
   background: color-mix(in srgb, var(--theme-accent) 80%, black);
 }
 
-/* 반응형 */
 @media (max-width: 1024px) {
   .adminChar-layout {
     flex-direction: column;
@@ -157,4 +154,19 @@
   .adminChar-add-box {
     width: 100%;
   }
+}
+
+.adminChar-list-scroll {
+  max-height: 400px;      
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.adminChar-list-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.adminChar-list-scroll::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
 }

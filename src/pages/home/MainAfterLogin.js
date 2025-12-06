@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
-import { sortedRanking } from "../../data/rankingData";  
+import { sortedRanking } from "../../data/rankingData";
 
 ChartJS.register(
   LineElement,
@@ -38,7 +38,6 @@ function ymd(date) {
   const d = pad(localDate.getUTCDate());
   return `${y}년 ${m}월 ${d}일`;
 }
-
 
 function dateKey(date) {
   return date.toISOString().split("T")[0];
@@ -72,14 +71,14 @@ function MainAfterLogin() {
     setUserChar(savedChar);
   }, []);
 
-  const subjectEntries = Object.entries(subjectTimes); 
+  const subjectEntries = Object.entries(subjectTimes);
 
   const sortedSubjects = subjectEntries
     .map(([subj, seconds]) => ({
       subj,
       hours: Number((seconds / 3600).toFixed(2)),
     }))
-    .sort((a, b) => b.hours - a.hours) 
+    .sort((a, b) => b.hours - a.hours)
     .slice(0, 7);
 
   const subjectLabels = sortedSubjects.map((x) => x.subj);
@@ -94,7 +93,7 @@ function MainAfterLogin() {
     const key = dateKey(date);
 
     last7.push({
-      date: key.substring(5), 
+      date: key.substring(5),
       hours: Number(((dailyStudy[key] || 0) / 3600).toFixed(2)),
     });
   }
@@ -115,10 +114,7 @@ function MainAfterLogin() {
   const baseLineOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    elements: {
-      line: { tension: 0.3, borderWidth: 3 },
-      point: { radius: 5, hoverRadius: 7 },
-    },
+    elements: { line: { tension: 0.3, borderWidth: 3 } },
     plugins: { legend: { display: false } },
   };
 
@@ -144,7 +140,6 @@ function MainAfterLogin() {
     },
   };
 
-
   return (
     <>
       <Header1 isLoggedIn={true} />
@@ -152,15 +147,14 @@ function MainAfterLogin() {
 
       <div className="page-content" style={{ paddingTop: "93px" }}>
         <div className="afterlogin-container">
-
           <div className="card-group">
-            <p className="card-title">캘린더</p>
             <div className="uniform-card">
+              <p className="card-date-inside">{ymd(new Date())}</p>
+
               <h3>
                 오늘의 할 일{" "}
                 <span className="todo-count">({todayTodos.length})</span>
               </h3>
-              <p className="date">{ymd(new Date())}</p>
 
               <ul className="todo-ul">
                 {todayTodos.length === 0 ? (
@@ -181,15 +175,19 @@ function MainAfterLogin() {
           </div>
 
           <div className="card-group">
-            <p className="card-title">캐릭터</p>
             <div className="uniform-card char-section">
               <div className="character-image-box">
                 {userChar?.image ? (
-                  <img src={userChar.image} alt="캐릭터 이미지" className="character-img-home" />
+                  <img
+                    src={userChar.image}
+                    alt="캐릭터"
+                    className="character-img-home"
+                  />
                 ) : (
                   <p className="no-img-text">캐릭터 없음</p>
                 )}
               </div>
+
               <p className="char-name">{userChar?.name || "미선택"}</p>
               <p className="char-level">
                 {userChar?.level ? `Lv.${userChar.level}` : ""}
@@ -204,15 +202,15 @@ function MainAfterLogin() {
           </div>
 
           <div className="card-group">
-            <p className="card-title">사용자 레벨 순위</p>
             <div className="uniform-card">
+              <p className="card-date-inside">{ymd(new Date())}</p>
+
               <h3>주간 순위</h3>
-              <p className="date">{ymd(new Date())}</p>
 
               <ol>
                 {ranking.map((user, i) => (
                   <li key={i}>
-                   {user.nickname} — Lv.{user.level}
+                    {user.nickname} — Lv.{user.level}
                   </li>
                 ))}
               </ol>
@@ -227,15 +225,11 @@ function MainAfterLogin() {
         </div>
 
         <div className="study-stat-big">
-          <p className="card-title" style={{ marginLeft: "6px" }}>
-            공부 통계
-          </p>
+          <p className="card-title">공부 통계</p>
 
           <div className="stats-inner-row">
-
-            <div className="stats-small-card today-card">
+            <div className="stats-small-card today">
               <h3 className="graph-title">오늘 과목별 공부시간</h3>
-
               <div className="chart-container">
                 <Line
                   data={{
@@ -254,9 +248,8 @@ function MainAfterLogin() {
               </div>
             </div>
 
-            <div className="stats-small-card week-card">
+            <div className="stats-small-card week">
               <h3 className="graph-title">최근 7일 공부시간</h3>
-
               <div className="chart-container">
                 <Line
                   data={{
@@ -274,7 +267,6 @@ function MainAfterLogin() {
                 />
               </div>
             </div>
-
           </div>
         </div>
 
