@@ -7,8 +7,8 @@ function AdminSettingTab() {
   const [selectedTheme, setSelectedTheme] = useState("#9CA2AE");
 
   const themes = [
-    "#BFC0C4", "#F9C4C4", "#ffc1e7ff", "#ffeeB5",
-    "#6C7A89", "#D9C9D9", "#bfd6edff", "#c1ffceff",
+    "#BFC0C4", "#F9C4C4", "#edbfeaff", "#ffeeB5",
+    "#6C7A89", "#D9C9D9", "#bfd6edff", "#bfedc7ff",
   ];
 
   useEffect(() => {
