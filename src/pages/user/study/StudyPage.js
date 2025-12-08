@@ -26,6 +26,20 @@ function StudyPage() {
     return monday.toISOString().split("T")[0];
   };
 
+  useEffect(() => {
+    const preventScroll = (e) => e.preventDefault();
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+
+    return () => {
+      document.body.style.overflow = "auto";
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+    };
+  }, []);
+
   const handleSubjectChange = (name) => {
     setCurrentSubject(name);
     setTime(0);
