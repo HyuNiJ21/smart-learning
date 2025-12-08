@@ -190,7 +190,7 @@
 
 /* 공통 리셋 버튼 */
 .reset-btn {
-  background: #FFD400;
+  background: var(--theme-bg) !important;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
@@ -208,12 +208,12 @@
 
 /* 수정 버튼 */
 .edit-btn {
-  background: #FFD400;
+  background: var(--theme-bg) !important;
   color: #333;
   border: none;
 }
 .edit-btn:hover {
-  background: #e6c200;
+  background: var(--theme-bg) !important;
 }
 
 /* 삭제 버튼 */
@@ -357,8 +357,8 @@
 }
 
 .answer-textarea:focus {
-  border-color: #ffd400;
-  box-shadow: 0 0 3px #ffe880;
+  border-color: var(--theme-bg) !important;
+  box-shadow: 0 0 3px var(--theme-bg) !important;
 }
 
 /* 관리자 공지/문의 수정 버튼 */
@@ -624,12 +624,12 @@
 
 /* 수정 버튼 (기본) */
 .edit-btn {
-  background: #FFD400;
+  background: var(--theme-bg) !important;
   color: #333;
   border: none;
 }
 .edit-btn:hover {
-  background: #e6c200;
+  background: var(--theme-bg) !important;
 }
 
 /* 삭제 버튼 */
@@ -746,8 +746,8 @@
 }
 
 .answer-textarea:focus {
-  border-color: #ffd400;
-  box-shadow: 0 0 3px #ffe880;
+  border-color: var(--theme-bg) !important;
+  box-shadow: 0 0 3px var(--theme-bg) !important;
 }
 
 /* 관리자 공지/문의 수정 버튼 (테마 색상 버전) */
@@ -857,4 +857,31 @@
 .qna-msg-text {
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* 이전글 · 다음글 버튼 스타일 */
+
+.nav-links {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav-links span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: #eee;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-links span:hover {
+  background: #ddd;
 }
