@@ -210,7 +210,7 @@ function StudyPage() {
             <div
               className="timer-circle"
               style={{
-                background: `conic-gradient(#FFD400 ${progress}deg, #fff 0deg)`
+                background: `conic-gradient(var(--theme-accent) ${progress}deg, #fff 0deg)`
               }}
             >
               <div className="timer-inner">
