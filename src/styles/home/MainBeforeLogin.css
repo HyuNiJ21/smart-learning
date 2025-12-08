@@ -62,3 +62,8 @@
 .before-login-page .common-btn:hover {
   background-color: #e6c200 !important;
 }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
