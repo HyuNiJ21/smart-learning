@@ -860,7 +860,6 @@
 }
 
 /* 이전글 · 다음글 버튼 스타일 */
-
 .nav-links {
   display: flex !important;
   flex-direction: row !important;
@@ -884,4 +883,21 @@
 
 .nav-links span:hover {
   background: #ddd;
+}
+
+.btn-right {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.small-btn {
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  padding: 8px 16px !important;
+  height: auto !important;
 }
