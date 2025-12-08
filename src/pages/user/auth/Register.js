@@ -42,7 +42,7 @@ function Register() {
       <Header1 isLoggedIn={false} />
       <Header2 isLoggedIn={false} />
 
-      <div className="auth-page" style={{paddingTop: "93px", minHeight: "calc(100vh-93px)", boxSizing: "border-box",}}>
+      <div className="auth-page" style={{ paddingTop: "93px", minHeight: "calc(100vh - 93px)", boxSizing: "border-box", }}>
       <div className="register-container">
         <div className="register-box">
           <h2>회원가입</h2>
