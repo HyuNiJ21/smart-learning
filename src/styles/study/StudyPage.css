@@ -8,9 +8,9 @@
   gap: clamp(40px, 5vw, 80px);
   padding: clamp(30px, 5vw, 60px);
   font-family: "Pretendard", sans-serif;
+  overflow: hidden;
 }
 
-/* 타이머 원형 */
 .timer-box {
   display: flex;
   flex-direction: column;
@@ -48,7 +48,6 @@
   color: #000;
 }
 
-/* 타이머 버튼 */
 .timer-btns {
   display: flex;
   justify-content: center;
@@ -72,7 +71,6 @@
   background: color-mix(in srgb, var(--theme-accent) 15%, white);
 }
 
-/* 기록 박스 */
 .record-box {
   background: #fff !important;
   border-radius: 24px;
@@ -92,7 +90,6 @@
   margin-bottom: 18px;
 }
 
-/* 사이 구분선 */
 .record-divider {
   height: 1px;
   width: 100%;
@@ -100,7 +97,6 @@
   margin: 14px 0;
 }
 
-/* 라벨 텍스트 */
 .record-label {
   font-size: 15px;
   font-weight: 600;
@@ -125,7 +121,6 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* 카테고리 박스 */
 .subject-box {
   background: #fff !important;
   border-radius: 24px;
@@ -172,7 +167,6 @@
   background: color-mix(in srgb, var(--theme-accent) 15%, white);
 }
 
-/* 리스트 */
 .subject-item {
   background: #fff;
   border: 1px solid #ddd;
@@ -250,7 +244,6 @@
   margin: 0 clamp(20px, 3vw, 60px);
 }
 
-/* 카테고리 / 카테고리별 누적시간 리스트 스크롤 */
 .subject-list,
 .subject-time-list {
   max-height: 220px;
@@ -258,7 +251,6 @@
   padding-right: 4px;
 }
 
-/* 스크롤바 스타일 */
 .subject-list::-webkit-scrollbar,
 .subject-time-list::-webkit-scrollbar {
   width: 6px;

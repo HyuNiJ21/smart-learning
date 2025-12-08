@@ -10,7 +10,7 @@
 }
 
 .admin-ranking-layout {
-  background-color: #ffeeB5;
+  background: var(--theme-accent);
   min-height: calc(100vh - 200px);
   display: flex;
   justify-content: center;
@@ -30,7 +30,7 @@
 .ranking-summary-box {
   height: var(--ranking-block-height);
   flex: 0 0 280px;
-  background: #fff7b5;
+  background: var(--theme-accent);
   border-radius: 20px;
   padding: 35px 25px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -58,7 +58,7 @@
 .ranking-list-box {
   height: var(--ranking-block-height);
   flex: 0 0 420px;
-  background: #fff7b5;
+  background: var(--theme-accent);
   border-radius: 20px;
   padding: 28px 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
