@@ -1,7 +1,6 @@
 /* Word Game 공통 요소 */
 .wordgame-page {
   background-color: var(--theme-bg) !important;
-  min-height: 100vh;
   padding: 120px 0 40px;
   font-family: "Pretendard", sans-serif;
   display: flex;
@@ -536,4 +535,9 @@
 .wordgame-nav-btn:hover {
   border-color: var(--theme-accent);
   background: color-mix(in srgb, var(--theme-accent) 20%, white);
+}
+
+.wordgame-body-fixed {
+  height: 100vh;
+  overflow: hidden;
 }
