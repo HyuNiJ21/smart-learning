@@ -4,10 +4,10 @@
   padding: 0px 60px;
   gap: 30px;
   background: var(--theme-accent);
-  min-height: 100vh;
+  min-height: auto;
   box-sizing: border-box;
   margin-top: 140px;
-  overflow-y: visible;
+  overflow-y: auto;
   padding-bottom: 50px;
 }
 
@@ -55,7 +55,7 @@
 
 .right-card {
   width: 100%;
-  max-width: 950px;
+  max-width: 900px;
   background: #fff;
   padding: 35px;
   border-radius: 18px;
@@ -69,7 +69,7 @@
   font-weight: 700;
 }
 
-/* 현황 */
+/* 현황 */어
 .status-column {
   display: flex;
   flex-direction: row;
@@ -88,8 +88,7 @@
 }
 
 .right-card.status {
-  height: 400px !important;
-  min-height: 0 !important;
+  height: auto !important;
   padding-bottom: 10px;
 }
 
@@ -174,7 +173,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 500px;
+  max-height: 380px;
   overflow-y: auto;
   padding-right: 6px;
 }
@@ -271,7 +270,7 @@
 
 /* 단어 테이블 */
 .word-table-wrapper {
-  max-height: 400px;
+  max-height: 280px;
   overflow-y: auto;
   border: 1px solid #eee;
   border-radius: 10px;
