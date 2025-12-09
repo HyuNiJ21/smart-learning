@@ -69,12 +69,13 @@
   font-weight: 700;
 }
 
-/* 현황 */어
+/* 현황 */
 .status-column {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 30px;
   margin: 0;
 }
 
@@ -84,7 +85,7 @@
   border: 2px solid var(--theme-accent);
   border-radius: 14px;
   text-align: center;
-  width: 220px;
+  width: 280px;
 }
 
 .right-card.status {
